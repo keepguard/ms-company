@@ -1,0 +1,47 @@
+# Arquivos e diretórios a serem ignorados no build Docker
+
+# Arquivos de build e cache
+target/
+# Permitir o JAR específico da aplicação
+!target/ms-company-*.jar
+*.jar
+*.war
+*.ear
+
+# Arquivos de IDE
+.idea/
+.vscode/
+*.iml
+.project
+.classpath
+.settings/
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Arquivos temporários
+*.tmp
+*.temp
+
+# Arquivos de configuração local
+application-local.yml
+application-dev.yml
+
+# Arquivos de teste
+src/test/
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile*
+.dockerignore
+
+# Scripts de build (já não são necessários)
+build-and-push.sh
