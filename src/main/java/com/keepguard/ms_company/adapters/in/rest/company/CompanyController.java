@@ -176,17 +176,17 @@ public class CompanyController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/x-application/{xApplication}")
-    @MetricsEndpoint(endpoint = "company_get_by_x_application", operation = "Buscar empresa por XApplication")
-    @Operation(summary = "Buscar empresa por XApplication", description = "Retorna os dados de uma empresa pelo XApplication")
+    @GetMapping("/x-tenant-id/{tenantId}")
+    @MetricsEndpoint(endpoint = "company_get_by_tenant_id", operation = "Buscar empresa por TenantId")
+    @Operation(summary = "Buscar empresa por TenantId", description = "Retorna os dados de uma empresa pelo TenantId")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Empresa encontrada"),
         @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
     })
-    public ResponseEntity<CompanyResponseDTO> getByXApplication(
-            @Parameter(description = "XApplication da empresa") @PathVariable UUID xApplication) {
-        log.info("Buscando empresa por XApplication: {}", xApplication);
-        CompanyViewDTO view = companyPort.getByXApplication(xApplication);
+    public ResponseEntity<CompanyResponseDTO> getByTenantId(
+            @Parameter(description = "TenantId da empresa") @PathVariable UUID tenantId) {
+        log.info("Buscando empresa por TenantId: {}", tenantId);
+        CompanyViewDTO view = companyPort.getByTenantId(tenantId);
         CompanyResponseDTO response = companyAdapterMapper.toResponseDTO(view);
         return ResponseEntity.ok(response);
     }

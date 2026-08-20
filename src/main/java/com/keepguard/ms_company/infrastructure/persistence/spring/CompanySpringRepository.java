@@ -24,15 +24,15 @@ public interface CompanySpringRepository extends JpaRepository<CompanyJpaEntity,
     @Query("SELECT c FROM CompanyJpaEntity c WHERE c.codeCompany = :codeCompany")
     Optional<CompanyJpaEntity> findByCodeCompany(@Param("codeCompany") UUID codeCompany);
 
-    @Query("SELECT c FROM CompanyJpaEntity c WHERE c.xApplication = :xApplication")
-    Optional<CompanyJpaEntity> findByXApplication(@Param("xApplication") UUID xApplication);
+    @Query("SELECT c FROM CompanyJpaEntity c WHERE c.tenantId = :tenantId")
+    Optional<CompanyJpaEntity> findByTenantId(@Param("tenantId") UUID tenantId);
 
     @Query("SELECT c FROM CompanyJpaEntity c WHERE c.status = :status")
     List<CompanyJpaEntity> findAllByStatus(@Param("status") CompanyStatusEnum status);
 
     boolean existsByCnpj(String cnpj);
 
-    boolean existsByxApplication(UUID xApplication);
+    boolean existsBytenantId(UUID tenantId);
 
     @Query("SELECT c FROM CompanyJpaEntity c WHERE LOWER(c.legalName) LIKE LOWER(CONCAT('%', :legalName, '%'))")
     List<CompanyJpaEntity> findByLegalNameContainingIgnoreCase(@Param("legalName") String legalName);

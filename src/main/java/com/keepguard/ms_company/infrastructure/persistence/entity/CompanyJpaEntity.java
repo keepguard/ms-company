@@ -30,8 +30,8 @@ public class CompanyJpaEntity {
     @Column(name = "code_company", unique = true, nullable = false, updatable = false, columnDefinition = "uuid")
     private UUID codeCompany;
 
-    @Column(name = "x_application", unique = true, nullable = false, updatable = false, columnDefinition = "uuid")
-    private UUID xApplication;
+    @Column(name = "tenant_id", unique = true, nullable = false, updatable = false, columnDefinition = "uuid")
+    private UUID tenantId;
 
     @Column(name = "name", nullable = false, length = 150)
     private String name;
@@ -96,8 +96,8 @@ public class CompanyJpaEntity {
         if (this.codeCompany == null) {
             this.codeCompany = UUID.randomUUID();
         }
-        if (this.xApplication == null) {
-            this.xApplication = UUID.randomUUID();
+        if (this.tenantId == null) {
+            this.tenantId = UUID.randomUUID();
         }
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();

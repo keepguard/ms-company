@@ -17,7 +17,7 @@ public final class Company {
 
     private final UUID id;
     private final UUID codeCompany;
-    private final UUID xApplication;
+    private final UUID tenantId;
     private String name;
     private String legalName;
     private String cnpj;
@@ -34,12 +34,12 @@ public final class Company {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    private Company(UUID id, UUID codeCompany, UUID xApplication, String name, String legalName, String cnpj, String stateRegistration,
+    private Company(UUID id, UUID codeCompany, UUID tenantId, String name, String legalName, String cnpj, String stateRegistration,
                    String municipalRegistration, TaxRegimeEnum taxRegime, String ein,
                    CompanyStatusEnum status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id == null ? UUID.randomUUID() : id;
         this.codeCompany = codeCompany == null ? UUID.randomUUID() : codeCompany;
-        this.xApplication = xApplication == null ? UUID.randomUUID() : xApplication;
+        this.tenantId = tenantId == null ? UUID.randomUUID() : tenantId;
         this.name = validateName(name);
         this.legalName = validateLegalName(legalName);
         this.cnpj = validateCnpj(cnpj);
@@ -59,10 +59,10 @@ public final class Company {
                           LocalDateTime.now(), LocalDateTime.now());
     }
 
-    public static Company of(UUID id, UUID codeCompany, UUID xApplication, String name, String legalName, String cnpj, String stateRegistration,
+    public static Company of(UUID id, UUID codeCompany, UUID tenantId, String name, String legalName, String cnpj, String stateRegistration,
                             String municipalRegistration, TaxRegimeEnum taxRegime, String ein,
                             CompanyStatusEnum status, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        return new Company(id, codeCompany, xApplication, name, legalName, cnpj, stateRegistration, municipalRegistration,
+        return new Company(id, codeCompany, tenantId, name, legalName, cnpj, stateRegistration, municipalRegistration,
                           taxRegime, ein, status, createdAt, updatedAt);
     }
 
@@ -98,7 +98,7 @@ public final class Company {
     // Getters
     public UUID getId() { return id; }
     public UUID getCodeCompany() { return codeCompany; }
-    public UUID getXApplication() { return xApplication; }
+    public UUID getTenantId() { return tenantId; }
     public String getName() { return name; }
     public String getLegalName() { return legalName; }
     public String getCnpj() { return cnpj; }

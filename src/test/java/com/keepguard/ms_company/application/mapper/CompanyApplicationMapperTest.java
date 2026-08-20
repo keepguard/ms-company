@@ -136,7 +136,7 @@ class CompanyApplicationMapperTest {
         assertNotNull(result);
         assertEquals(company.getId(), result.id());
         assertEquals(company.getCodeCompany(), result.codeCompany());
-        assertEquals(company.getXApplication(), result.xApplication());
+        assertEquals(company.getTenantId(), result.tenantId());
         assertEquals(company.getName(), result.name());
         assertEquals(company.getLegalName(), result.legalName());
         assertEquals(company.getCnpj(), result.cnpj());

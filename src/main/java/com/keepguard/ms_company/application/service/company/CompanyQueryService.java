@@ -173,10 +173,10 @@ public class CompanyQueryService {
     }
 
 
-    public CompanyViewDTO getByXApplication(UUID xApplication) {
+    public CompanyViewDTO getByTenantId(UUID tenantId) {
         try {
             // Tentar buscar no cache primeiro
-            CompanyViewDTO cachedCompany = companyCachePort.getCompanyByXApplicationFromCache(xApplication.toString());
+            CompanyViewDTO cachedCompany = companyCachePort.getCompanyByTenantIdFromCache(tenantId.toString());
             if (cachedCompany != null) {
                 metricsPort.incrementCounter("company_queries_total",
                     Map.of("query_type", "GET_BY_X_APPLICATION", "status", "CACHE_HIT"));
@@ -184,24 +184,24 @@ public class CompanyQueryService {
             }
 
             // Se não encontrou no cache, buscar no banco
-            Company company = companyRepository.findByXApplication(xApplication)
+            Company company = companyRepository.findByTenantId(tenantId)
                 .orElseThrow(() -> {
                     metricsPort.incrementCounter("company_not_found_total",
-                        Map.of("entity_id", xApplication.toString(), "operation", "get_by_x_application"));
-                    return new NotFoundException("Empresa não encontrada: " + xApplication, "COMPANY_NOT_FOUND", Map.of("xApplication", xApplication));
+                        Map.of("entity_id", tenantId.toString(), "operation", "get_by_tenant_id"));
+                    return new NotFoundException("Empresa não encontrada: " + tenantId, "COMPANY_NOT_FOUND", Map.of("tenantId", tenantId));
                 });
 
             // Validar se a empresa está ativa
             if (!company.isActive()) {
                 metricsPort.incrementCounter("company_invalid_status_total",
-                    Map.of("entity_id", xApplication.toString(), "status", company.getStatus().toString(), "operation", "get_by_x_application"));
-                throw new NotFoundException("Empresa não está ativa: " + xApplication, "COMPANY_NOT_ACTIVE", Map.of("xApplication", xApplication, "status", company.getStatus().getDescription()));
+                    Map.of("entity_id", tenantId.toString(), "status", company.getStatus().toString(), "operation", "get_by_tenant_id"));
+                throw new NotFoundException("Empresa não está ativa: " + tenantId, "COMPANY_NOT_ACTIVE", Map.of("tenantId", tenantId, "status", company.getStatus().getDescription()));
             }
 
             CompanyViewDTO companyView = companyMapper.toViewDTO(company);
 
             // Cachear o resultado
-            companyCachePort.cacheCompanyByXApplication(xApplication.toString(), companyView);
+            companyCachePort.cacheCompanyByTenantId(tenantId.toString(), companyView);
 
             metricsPort.incrementCounter("company_queries_total",
                 Map.of("query_type", "GET_BY_X_APPLICATION", "status", "SUCCESS"));
@@ -212,17 +212,17 @@ public class CompanyQueryService {
             // Re-throw exceções de negócio sem wrapping
             throw e;
         } catch (Exception e) {
-            log.error("Erro ao buscar empresa por XApplication: {} - Erro: {}", xApplication, e.getMessage(), e);
+            log.error("Erro ao buscar empresa por TenantId: {} - Erro: {}", tenantId, e.getMessage(), e);
             metricsPort.incrementCounter("company_queries_total",
                 Map.of("query_type", "GET_BY_X_APPLICATION", "status", "ERROR"));
-            throw new RuntimeException("Erro interno ao buscar empresa por XApplication", e);
+            throw new RuntimeException("Erro interno ao buscar empresa por TenantId", e);
         }
     }
 
-    public CompanySimpleResponseDTO getSimpleByXApplication(UUID xApplication) {
+    public CompanySimpleResponseDTO getSimpleByTenantId(UUID tenantId) {
         try {
             // Tentar buscar no cache primeiro
-            CompanySimpleResponseDTO cachedCompany = companyCachePort.getSimpleCompanyByXApplicationFromCache(xApplication.toString());
+            CompanySimpleResponseDTO cachedCompany = companyCachePort.getSimpleCompanyByTenantIdFromCache(tenantId.toString());
             if (cachedCompany != null) {
                 metricsPort.incrementCounter("company_queries_total",
                     Map.of("query_type", "GET_SIMPLE_BY_X_APPLICATION", "status", "CACHE_HIT"));
@@ -230,25 +230,25 @@ public class CompanyQueryService {
             }
 
             // Se não encontrou no cache, buscar no banco
-            Company company = companyRepository.findByXApplication(xApplication)
+            Company company = companyRepository.findByTenantId(tenantId)
                 .orElseThrow(() -> {
                     metricsPort.incrementCounter("company_not_found_total",
-                        Map.of("entity_id", xApplication.toString(), "operation", "get_simple_by_x_application"));
-                    return new NotFoundException("Empresa não encontrada: " + xApplication, "COMPANY_NOT_FOUND", Map.of("xApplication", xApplication));
+                        Map.of("entity_id", tenantId.toString(), "operation", "get_simple_by_tenant_id"));
+                    return new NotFoundException("Empresa não encontrada: " + tenantId, "COMPANY_NOT_FOUND", Map.of("tenantId", tenantId));
                 });
 
             // Validar se a empresa está ativa
             if (!company.isActive()) {
                 metricsPort.incrementCounter("company_invalid_status_total",
-                    Map.of("entity_id", xApplication.toString(), "status", company.getStatus().toString(), "operation", "get_simple_by_x_application"));
-                throw new NotFoundException("Empresa não está ativa: " + xApplication, "COMPANY_NOT_ACTIVE", Map.of("xApplication", xApplication, "status", company.getStatus().getDescription()));
+                    Map.of("entity_id", tenantId.toString(), "status", company.getStatus().toString(), "operation", "get_simple_by_tenant_id"));
+                throw new NotFoundException("Empresa não está ativa: " + tenantId, "COMPANY_NOT_ACTIVE", Map.of("tenantId", tenantId, "status", company.getStatus().getDescription()));
             }
 
             CompanyViewDTO companyView = companyMapper.toViewDTO(company);
             CompanySimpleResponseDTO simpleResponse = companyMapper.toSimpleResponseDTO(companyView);
 
             // Cachear o resultado
-            companyCachePort.cacheSimpleCompanyByXApplication(xApplication.toString(), simpleResponse);
+            companyCachePort.cacheSimpleCompanyByTenantId(tenantId.toString(), simpleResponse);
 
             metricsPort.incrementCounter("company_queries_total",
                 Map.of("query_type", "GET_SIMPLE_BY_X_APPLICATION", "status", "SUCCESS"));
@@ -259,10 +259,10 @@ public class CompanyQueryService {
             // Re-throw exceções de negócio sem wrapping
             throw e;
         } catch (Exception e) {
-            log.error("Erro ao buscar empresa simples por XApplication: {} - Erro: {}", xApplication, e.getMessage(), e);
+            log.error("Erro ao buscar empresa simples por TenantId: {} - Erro: {}", tenantId, e.getMessage(), e);
             metricsPort.incrementCounter("company_queries_total",
                 Map.of("query_type", "GET_SIMPLE_BY_X_APPLICATION", "status", "ERROR"));
-            throw new RuntimeException("Erro interno ao buscar empresa simples por XApplication", e);
+            throw new RuntimeException("Erro interno ao buscar empresa simples por TenantId", e);
         }
     }
 }

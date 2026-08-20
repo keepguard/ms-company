@@ -76,8 +76,8 @@ public class CompanyRepositoryAdapter implements CompanyRepositoryPort {
     }
 
     @Override
-    public Optional<Company> findByXApplication(UUID xApplication) {
-        return springRepository.findByXApplication(xApplication)
+    public Optional<Company> findByTenantId(UUID tenantId) {
+        return springRepository.findByTenantId(tenantId)
                 .map(mapper::toDomain);
     }
 

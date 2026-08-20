@@ -24,7 +24,7 @@ public class CompanyResponseDTO {
 
     private UUID id;
     private UUID codeCompany;
-    private UUID xApplication;
+    private UUID tenantId;
     private String name;
     private String legalName;
     private String cnpj;

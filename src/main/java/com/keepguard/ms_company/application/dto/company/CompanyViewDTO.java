@@ -15,7 +15,7 @@ import java.util.UUID;
 public record CompanyViewDTO(
     UUID id,
     UUID codeCompany,
-    UUID xApplication,
+    UUID tenantId,
     String name,
     String legalName,
     String cnpj,
@@ -40,8 +40,8 @@ public record CompanyViewDTO(
         if (codeCompany == null) {
             throw new IllegalArgumentException("CodeCompany é obrigatório");
         }
-        if (xApplication == null) {
-            throw new IllegalArgumentException("XApplication é obrigatório");
+        if (tenantId == null) {
+            throw new IllegalArgumentException("TenantId é obrigatório");
         }
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Nome fantasia é obrigatório");

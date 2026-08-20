@@ -22,7 +22,7 @@ public class CompanyTestBuilder {
     
     private UUID id = UUID.randomUUID();
     private UUID codeCompany = UUID.randomUUID();
-    private UUID xApplication = UUID.randomUUID();
+    private UUID tenantId = UUID.randomUUID();
     private String name = "Empresa Teste";
     private String legalName = "Empresa Teste Ltda";
     private String cnpj = "11222333000181";
@@ -42,8 +42,8 @@ public class CompanyTestBuilder {
         return this;
     }
     
-    public CompanyTestBuilder withXApplication(UUID xApplication) {
-        this.xApplication = xApplication;
+    public CompanyTestBuilder withTenantId(UUID tenantId) {
+        this.tenantId = tenantId;
         return this;
     }
     
@@ -171,7 +171,7 @@ public class CompanyTestBuilder {
         return new CompanyViewDTO(
             id,
             codeCompany,
-            xApplication,
+            tenantId,
             name,
             legalName,
             cnpj,
@@ -240,7 +240,7 @@ public class CompanyTestBuilder {
         return new CompanyResponseDTO(
             id,
             codeCompany,
-            xApplication,
+            tenantId,
             name,
             legalName,
             cnpj,
@@ -263,7 +263,7 @@ public class CompanyTestBuilder {
         return new CompanySimpleResponseDTO(
             id,
             codeCompany,
-            xApplication,
+            tenantId,
             name,
             legalName,
             cnpj,
@@ -281,7 +281,7 @@ public class CompanyTestBuilder {
         return CompanyJpaEntity.builder()
             .id(id)
             .codeCompany(codeCompany)
-            .xApplication(xApplication)
+            .tenantId(tenantId)
             .name(name)
             .legalName(legalName)
             .cnpj(cnpj)

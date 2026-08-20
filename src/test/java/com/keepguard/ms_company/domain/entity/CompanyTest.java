@@ -46,7 +46,7 @@ class CompanyTest {
         // Then
         assertNotNull(company.getId());
         assertNotNull(company.getCodeCompany());
-        assertNotNull(company.getXApplication());
+        assertNotNull(company.getTenantId());
         assertEquals("Empresa Teste", company.getName());
         assertEquals("Empresa Teste Ltda", company.getLegalName());
         assertEquals("11222333000181", company.getCnpj());
@@ -63,13 +63,13 @@ class CompanyTest {
     @DisplayName("Deve criar empresa com ID específico")
     void shouldCreateCompanyWithSpecificId() {
         // Given
-        UUID xApplication = UUID.randomUUID();
+        UUID tenantId = UUID.randomUUID();
         
         // When
         Company company = Company.of(
                 companyId,
                 codeCompany,
-                xApplication,
+                tenantId,
                 "Empresa Teste",
                 "Empresa Teste Ltda",
                 "11222333000181",
@@ -85,7 +85,7 @@ class CompanyTest {
         // Then
         assertEquals(companyId, company.getId());
         assertEquals(codeCompany, company.getCodeCompany());
-        assertEquals(xApplication, company.getXApplication());
+        assertEquals(tenantId, company.getTenantId());
     }
     
     @Test

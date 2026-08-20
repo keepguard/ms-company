@@ -52,7 +52,7 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
         String method = request.getMethod();
         String userAgent = request.getHeader("User-Agent");
         String remoteAddr = request.getRemoteAddr();
-        String applicationName = request.getHeader("X-Application");
+        String applicationName = request.getHeader("X-Tenant-Id");
         
         // Define o Correlation ID no contexto
         correlationContext.setCorrelationId(correlationId);

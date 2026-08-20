@@ -46,7 +46,7 @@ public class CompanyApplicationMapper {
             return Company.of(
                 existingCompany.getId(),
                 existingCompany.getCodeCompany(),
-                existingCompany.getXApplication(),
+                existingCompany.getTenantId(),
                 command.name() != null ? command.name() : existingCompany.getName(),
                 command.legalName() != null ? command.legalName() : existingCompany.getLegalName(),
                 existingCompany.getCnpj(), // CNPJ não pode ser alterado
@@ -73,7 +73,7 @@ public class CompanyApplicationMapper {
             return new CompanyViewDTO(
                 company.getId(),
                 company.getCodeCompany(),
-                company.getXApplication(),
+                company.getTenantId(),
                 company.getName(),
                 company.getLegalName(),
                 company.getCnpj(),
@@ -105,7 +105,7 @@ public class CompanyApplicationMapper {
             return CompanySimpleResponseDTO.builder()
                 .id(viewDTO.id())
                 .codeCompany(viewDTO.codeCompany())
-                .xApplication(viewDTO.xApplication())
+                .tenantId(viewDTO.tenantId())
                 .name(viewDTO.name())
                 .legalName(viewDTO.legalName())
                 .cnpj(viewDTO.cnpj())

@@ -86,13 +86,13 @@ public class CompanyUseCaseService implements CompanyPort {
     }
 
     @Override
-    public CompanyViewDTO getByXApplication(UUID xApplication) {
-        return queryService.getByXApplication(xApplication);
+    public CompanyViewDTO getByTenantId(UUID tenantId) {
+        return queryService.getByTenantId(tenantId);
     }
 
     @Override
-    public CompanySimpleResponseDTO getSimpleByXApplication(UUID xApplication) {
-        return queryService.getSimpleByXApplication(xApplication);
+    public CompanySimpleResponseDTO getSimpleByTenantId(UUID tenantId) {
+        return queryService.getSimpleByTenantId(tenantId);
     }
 
     @Override

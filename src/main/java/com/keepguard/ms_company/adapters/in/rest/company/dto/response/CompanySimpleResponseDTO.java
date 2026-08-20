@@ -25,7 +25,7 @@ public class CompanySimpleResponseDTO {
     private UUID codeCompany;
 
     @Schema(description = "Código de aplicação da empresa", example = "123e4567-e89b-12d3-a456-426614174002")
-    private UUID xApplication;
+    private UUID tenantId;
 
     @Schema(description = "Nome da empresa", example = "Empresa Exemplo Ltda")
     private String name;

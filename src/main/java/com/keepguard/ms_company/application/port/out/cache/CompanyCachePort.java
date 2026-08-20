@@ -17,19 +17,19 @@ public interface CompanyCachePort {
     CompanyViewDTO getCompanyByCodeCompanyFromCache(String codeCompany);
     void removeCompanyFromCacheByCodeCompany(String codeCompany);
 
-    void cacheCompanyByXApplication(String xApplication, CompanyViewDTO company);
-    CompanyViewDTO getCompanyByXApplicationFromCache(String xApplication);
-    void removeCompanyFromCacheByXApplication(String xApplication);
+    void cacheCompanyByTenantId(String tenantId, CompanyViewDTO company);
+    CompanyViewDTO getCompanyByTenantIdFromCache(String tenantId);
+    void removeCompanyFromCacheByTenantId(String tenantId);
 
     void cacheSimpleCompanyById(String companyId, CompanySimpleResponseDTO company);
     CompanySimpleResponseDTO getSimpleCompanyByIdFromCache(String companyId);
     void removeSimpleCompanyFromCacheById(String companyId);
 
-    void cacheSimpleCompanyByXApplication(String xApplication, CompanySimpleResponseDTO company);
-    CompanySimpleResponseDTO getSimpleCompanyByXApplicationFromCache(String xApplication);
-    void removeSimpleCompanyFromCacheByXApplication(String xApplication);
+    void cacheSimpleCompanyByTenantId(String tenantId, CompanySimpleResponseDTO company);
+    CompanySimpleResponseDTO getSimpleCompanyByTenantIdFromCache(String tenantId);
+    void removeSimpleCompanyFromCacheByTenantId(String tenantId);
 
-    void clearAllCompanyCache(String companyId, String cnpj, String codeCompany, String xApplication);
+    void clearAllCompanyCache(String companyId, String cnpj, String codeCompany, String tenantId);
     void clearAllCompanyCacheById(String companyId);
 
 }

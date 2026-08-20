@@ -25,7 +25,7 @@ public interface CompanyRepositoryPort {
 
     Optional<Company> findByCodeCompany(UUID codeCompany);
 
-    Optional<Company> findByXApplication(UUID xApplication);
+    Optional<Company> findByTenantId(UUID tenantId);
 
     List<Company> findAllByStatus(CompanyStatusEnum status);
 

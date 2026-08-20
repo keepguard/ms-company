@@ -66,7 +66,7 @@ class CompanyQueryServiceTest {
         companyView = new CompanyViewDTO(
             companyId,
             UUID.randomUUID(), // codeCompany
-            UUID.randomUUID(), // xApplication
+            UUID.randomUUID(), // tenantId
             "Empresa Teste",
             "Empresa Teste Ltda",
             "11222333000181",
@@ -470,7 +470,7 @@ class CompanyQueryServiceTest {
         CompanyViewDTO companyView2 = new CompanyViewDTO(
             UUID.randomUUID(),
             UUID.randomUUID(), // codeCompany
-            UUID.randomUUID(), // xApplication
+            UUID.randomUUID(), // tenantId
             "Outra Empresa",
             "Outra Empresa Ltda",
             "98765432000198",
@@ -510,14 +510,14 @@ class CompanyQueryServiceTest {
     }
 
     @Test
-    @DisplayName("Deve buscar empresa por XApplication com sucesso do cache")
-    void shouldGetCompanyByXApplicationFromCache() {
+    @DisplayName("Deve buscar empresa por TenantId com sucesso do cache")
+    void shouldGetCompanyByTenantIdFromCache() {
         // Given
-        UUID xApplication = UUID.randomUUID();
+        UUID tenantId = UUID.randomUUID();
         CompanySimpleResponseDTO simpleResponseDTO = CompanySimpleResponseDTO.builder()
             .id(companyId)
             .codeCompany(UUID.randomUUID())
-            .xApplication(xApplication)
+            .tenantId(tenantId)
             .name("Empresa Teste")
             .legalName("Empresa Teste Ltda")
             .cnpj("11222333000181")
@@ -530,11 +530,11 @@ class CompanyQueryServiceTest {
             .updatedAt(LocalDateTime.now())
             .build();
 
-        when(companyCachePort.getSimpleCompanyByXApplicationFromCache(xApplication.toString()))
+        when(companyCachePort.getSimpleCompanyByTenantIdFromCache(tenantId.toString()))
             .thenReturn(simpleResponseDTO);
 
         // When
-        CompanySimpleResponseDTO result = companyQueryService.getSimpleByXApplication(xApplication);
+        CompanySimpleResponseDTO result = companyQueryService.getSimpleByTenantId(tenantId);
 
         // Then
         assertNotNull(result);
@@ -542,16 +542,16 @@ class CompanyQueryServiceTest {
         assertEquals(simpleResponseDTO.getName(), result.getName());
         assertEquals(simpleResponseDTO.getCnpj(), result.getCnpj());
 
-        verify(companyCachePort).getSimpleCompanyByXApplicationFromCache(xApplication.toString());
-        verify(companyRepository, never()).findByXApplication(any());
+        verify(companyCachePort).getSimpleCompanyByTenantIdFromCache(tenantId.toString());
+        verify(companyRepository, never()).findByTenantId(any());
         verify(metricsPort).incrementCounter(eq("company_queries_total"), any());
     }
 
     @Test
-    @DisplayName("Deve buscar empresa por XApplication com sucesso do banco e cachear")
-    void shouldGetCompanyByXApplicationFromDatabaseAndCache() {
+    @DisplayName("Deve buscar empresa por TenantId com sucesso do banco e cachear")
+    void shouldGetCompanyByTenantIdFromDatabaseAndCache() {
         // Given
-        UUID xApplication = UUID.randomUUID();
+        UUID tenantId = UUID.randomUUID();
         Company company = CompanyTestBuilder.createDefaultCompany();
         // Adicionar dados obrigatórios para aprovação
         addRequiredDataForApproval(company);
@@ -562,7 +562,7 @@ class CompanyQueryServiceTest {
         CompanySimpleResponseDTO simpleResponseDTO = CompanySimpleResponseDTO.builder()
             .id(companyId)
             .codeCompany(UUID.randomUUID())
-            .xApplication(xApplication)
+            .tenantId(tenantId)
             .name("Empresa Teste")
             .legalName("Empresa Teste Ltda")
             .cnpj("11222333000181")
@@ -575,9 +575,9 @@ class CompanyQueryServiceTest {
             .updatedAt(LocalDateTime.now())
             .build();
 
-        when(companyCachePort.getSimpleCompanyByXApplicationFromCache(xApplication.toString()))
+        when(companyCachePort.getSimpleCompanyByTenantIdFromCache(tenantId.toString()))
             .thenReturn(null);
-        when(companyRepository.findByXApplication(xApplication))
+        when(companyRepository.findByTenantId(tenantId))
             .thenReturn(Optional.of(company));
         when(companyMapper.toViewDTO(company))
             .thenReturn(companyView);
@@ -585,7 +585,7 @@ class CompanyQueryServiceTest {
             .thenReturn(simpleResponseDTO);
 
         // When
-        CompanySimpleResponseDTO result = companyQueryService.getSimpleByXApplication(xApplication);
+        CompanySimpleResponseDTO result = companyQueryService.getSimpleByTenantId(tenantId);
 
         // Then
         assertNotNull(result);
@@ -593,66 +593,66 @@ class CompanyQueryServiceTest {
         assertEquals(simpleResponseDTO.getName(), result.getName());
         assertEquals(simpleResponseDTO.getCnpj(), result.getCnpj());
 
-        verify(companyCachePort).getSimpleCompanyByXApplicationFromCache(xApplication.toString());
-        verify(companyRepository).findByXApplication(xApplication);
+        verify(companyCachePort).getSimpleCompanyByTenantIdFromCache(tenantId.toString());
+        verify(companyRepository).findByTenantId(tenantId);
         verify(companyMapper).toViewDTO(company);
         verify(companyMapper).toSimpleResponseDTO(companyView);
-        verify(companyCachePort).cacheSimpleCompanyByXApplication(xApplication.toString(), simpleResponseDTO);
+        verify(companyCachePort).cacheSimpleCompanyByTenantId(tenantId.toString(), simpleResponseDTO);
         verify(metricsPort).incrementCounter(eq("company_queries_total"), any());
     }
 
     @Test
-    @DisplayName("Deve lançar NotFoundException quando empresa não encontrada por XApplication")
-    void shouldThrowNotFoundExceptionWhenCompanyNotFoundByXApplication() {
+    @DisplayName("Deve lançar NotFoundException quando empresa não encontrada por TenantId")
+    void shouldThrowNotFoundExceptionWhenCompanyNotFoundByTenantId() {
         // Given
-        UUID xApplication = UUID.randomUUID();
-        when(companyCachePort.getSimpleCompanyByXApplicationFromCache(xApplication.toString()))
+        UUID tenantId = UUID.randomUUID();
+        when(companyCachePort.getSimpleCompanyByTenantIdFromCache(tenantId.toString()))
             .thenReturn(null);
-        when(companyRepository.findByXApplication(xApplication))
+        when(companyRepository.findByTenantId(tenantId))
             .thenReturn(Optional.empty());
 
         // When & Then
         NotFoundException exception = assertThrows(NotFoundException.class, () -> {
-            companyQueryService.getSimpleByXApplication(xApplication);
+            companyQueryService.getSimpleByTenantId(tenantId);
         });
 
-        assertEquals("Empresa não encontrada: " + xApplication, exception.getMessage());
+        assertEquals("Empresa não encontrada: " + tenantId, exception.getMessage());
         assertEquals("COMPANY_NOT_FOUND", exception.getErrorCode());
 
-        verify(companyCachePort).getSimpleCompanyByXApplicationFromCache(xApplication.toString());
-        verify(companyRepository).findByXApplication(xApplication);
+        verify(companyCachePort).getSimpleCompanyByTenantIdFromCache(tenantId.toString());
+        verify(companyRepository).findByTenantId(tenantId);
         verify(companyMapper, never()).toViewDTO(any());
         verify(companyMapper, never()).toSimpleResponseDTO(any());
-        verify(companyCachePort, never()).cacheSimpleCompanyByXApplication(anyString(), any());
+        verify(companyCachePort, never()).cacheSimpleCompanyByTenantId(anyString(), any());
         verify(metricsPort).incrementCounter(eq("company_not_found_total"), any());
     }
 
     @Test
-    @DisplayName("Deve lançar NotFoundException quando empresa não está ativa por XApplication")
-    void shouldThrowNotFoundExceptionWhenCompanyIsNotActiveByXApplication() {
+    @DisplayName("Deve lançar NotFoundException quando empresa não está ativa por TenantId")
+    void shouldThrowNotFoundExceptionWhenCompanyIsNotActiveByTenantId() {
         // Given
-        UUID xApplication = UUID.randomUUID();
+        UUID tenantId = UUID.randomUUID();
         Company company = CompanyTestBuilder.createDefaultCompany();
         // Empresa com status PENDING_APPROVAL (não ativa)
         
-        when(companyCachePort.getSimpleCompanyByXApplicationFromCache(xApplication.toString()))
+        when(companyCachePort.getSimpleCompanyByTenantIdFromCache(tenantId.toString()))
             .thenReturn(null);
-        when(companyRepository.findByXApplication(xApplication))
+        when(companyRepository.findByTenantId(tenantId))
             .thenReturn(Optional.of(company));
 
         // When & Then
         NotFoundException exception = assertThrows(NotFoundException.class, () -> {
-            companyQueryService.getSimpleByXApplication(xApplication);
+            companyQueryService.getSimpleByTenantId(tenantId);
         });
 
-        assertEquals("Empresa não está ativa: " + xApplication, exception.getMessage());
+        assertEquals("Empresa não está ativa: " + tenantId, exception.getMessage());
         assertEquals("COMPANY_NOT_ACTIVE", exception.getErrorCode());
 
-        verify(companyCachePort).getSimpleCompanyByXApplicationFromCache(xApplication.toString());
-        verify(companyRepository).findByXApplication(xApplication);
+        verify(companyCachePort).getSimpleCompanyByTenantIdFromCache(tenantId.toString());
+        verify(companyRepository).findByTenantId(tenantId);
         verify(companyMapper, never()).toViewDTO(any());
         verify(companyMapper, never()).toSimpleResponseDTO(any());
-        verify(companyCachePort, never()).cacheSimpleCompanyByXApplication(anyString(), any());
+        verify(companyCachePort, never()).cacheSimpleCompanyByTenantId(anyString(), any());
         verify(metricsPort).incrementCounter(eq("company_invalid_status_total"), any());
     }
 

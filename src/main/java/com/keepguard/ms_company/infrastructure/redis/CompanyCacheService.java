@@ -142,21 +142,21 @@ public class CompanyCacheService implements CompanyCachePort {
     }
 
     @CircuitBreaker(name = "redisCache")
-    public void cacheCompanyByXApplication(String xApplication, CompanyViewDTO company) {
+    public void cacheCompanyByTenantId(String tenantId, CompanyViewDTO company) {
         try {
-            String key = companyCachePrefix + "xapp:" + xApplication;
+            String key = companyCachePrefix + "xapp:" + tenantId;
             String value = objectMapper.writeValueAsString(company);
             redisTemplate.opsForValue().set(key, value, companyTtlSeconds, TimeUnit.SECONDS);
         } catch (Exception e) {
-            log.warn("Falha ao cachear empresa por XApplication | key={}", xApplication);
+            log.warn("Falha ao cachear empresa por TenantId | key={}", tenantId);
         }
     }
 
     @CircuitBreaker(name = "redisCache", fallbackMethod = "getCompanyFallback")
     @Retry(name = "redisCache")
-    public CompanyViewDTO getCompanyByXApplicationFromCache(String xApplication) {
+    public CompanyViewDTO getCompanyByTenantIdFromCache(String tenantId) {
         try {
-            String key = companyCachePrefix + "xapp:" + xApplication;
+            String key = companyCachePrefix + "xapp:" + tenantId;
             String value = redisTemplate.opsForValue().get(key);
             if (value != null) {
                 return objectMapper.readValue(value, CompanyViewDTO.class);
@@ -168,12 +168,12 @@ public class CompanyCacheService implements CompanyCachePort {
     }
 
     @CircuitBreaker(name = "redisCache")
-    public void removeCompanyFromCacheByXApplication(String xApplication) {
+    public void removeCompanyFromCacheByTenantId(String tenantId) {
         try {
-            String key = companyCachePrefix + "xapp:" + xApplication;
+            String key = companyCachePrefix + "xapp:" + tenantId;
             redisTemplate.delete(key);
         } catch (Exception e) {
-            log.warn("Falha ao remover empresa do cache por XApplication | key={}", xApplication);
+            log.warn("Falha ao remover empresa do cache por TenantId | key={}", tenantId);
         }
     }
 
@@ -214,21 +214,21 @@ public class CompanyCacheService implements CompanyCachePort {
     }
 
     @CircuitBreaker(name = "redisCache")
-    public void cacheSimpleCompanyByXApplication(String xApplication, CompanySimpleResponseDTO company) {
+    public void cacheSimpleCompanyByTenantId(String tenantId, CompanySimpleResponseDTO company) {
         try {
-            String key = companyCachePrefix + "simple:xapp:" + xApplication;
+            String key = companyCachePrefix + "simple:xapp:" + tenantId;
             String value = objectMapper.writeValueAsString(company);
             redisTemplate.opsForValue().set(key, value, companyTtlSeconds, TimeUnit.SECONDS);
         } catch (Exception e) {
-            log.warn("Falha ao cachear empresa simples por XApplication | key={}", xApplication);
+            log.warn("Falha ao cachear empresa simples por TenantId | key={}", tenantId);
         }
     }
 
     @CircuitBreaker(name = "redisCache", fallbackMethod = "getSimpleCompanyFallback")
     @Retry(name = "redisCache")
-    public CompanySimpleResponseDTO getSimpleCompanyByXApplicationFromCache(String xApplication) {
+    public CompanySimpleResponseDTO getSimpleCompanyByTenantIdFromCache(String tenantId) {
         try {
-            String key = companyCachePrefix + "simple:xapp:" + xApplication;
+            String key = companyCachePrefix + "simple:xapp:" + tenantId;
             String value = redisTemplate.opsForValue().get(key);
             if (value != null) {
                 return objectMapper.readValue(value, CompanySimpleResponseDTO.class);
@@ -240,23 +240,23 @@ public class CompanyCacheService implements CompanyCachePort {
     }
 
     @CircuitBreaker(name = "redisCache")
-    public void removeSimpleCompanyFromCacheByXApplication(String xApplication) {
+    public void removeSimpleCompanyFromCacheByTenantId(String tenantId) {
         try {
-            String key = companyCachePrefix + "simple:xapp:" + xApplication;
+            String key = companyCachePrefix + "simple:xapp:" + tenantId;
             redisTemplate.delete(key);
         } catch (Exception e) {
-            log.warn("Falha ao remover empresa simples do cache por XApplication | key={}", xApplication);
+            log.warn("Falha ao remover empresa simples do cache por TenantId | key={}", tenantId);
         }
     }
 
     @CircuitBreaker(name = "redisCache")
-    public void clearAllCompanyCache(String companyId, String cnpj, String codeCompany, String xApplication) {
+    public void clearAllCompanyCache(String companyId, String cnpj, String codeCompany, String tenantId) {
         try {
             removeCompanyFromCacheById(companyId);
             removeCompanyFromCacheByCnpj(cnpj);
             removeCompanyFromCacheByCodeCompany(codeCompany);
             removeSimpleCompanyFromCacheById(companyId);
-            removeSimpleCompanyFromCacheByXApplication(xApplication);
+            removeSimpleCompanyFromCacheByTenantId(tenantId);
             
             addressCacheService.removeAddressesFromCacheByCompanyId(companyId);
             bankAccountCacheService.removeBankAccountsFromCacheByCompanyId(companyId);

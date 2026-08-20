@@ -39,9 +39,9 @@ public interface CompanyPort {
 
     CompanyViewDTO getByCnpj(String cnpj);
 
-    CompanyViewDTO getByXApplication(UUID xApplication);
+    CompanyViewDTO getByTenantId(UUID tenantId);
 
-    CompanySimpleResponseDTO getSimpleByXApplication(UUID xApplication);
+    CompanySimpleResponseDTO getSimpleByTenantId(UUID tenantId);
 
     PageResultDTO<CompanyViewDTO> search(CompanySearchCriteriaDTO criteria);
 }

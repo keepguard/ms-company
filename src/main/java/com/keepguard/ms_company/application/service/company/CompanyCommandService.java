@@ -98,7 +98,7 @@ public class CompanyCommandService {
             savedCompany.getId().toString(),
             savedCompany.getCnpj(),
             savedCompany.getCodeCompany().toString(),
-            savedCompany.getXApplication().toString()
+            savedCompany.getTenantId().toString()
         );
 
         // Registra métricas específicas (não cobertas pelo @LogOperation)
@@ -138,7 +138,7 @@ public class CompanyCommandService {
             updatedCompany.getId().toString(),
             updatedCompany.getCnpj(),
             updatedCompany.getCodeCompany().toString(),
-            updatedCompany.getXApplication().toString()
+            updatedCompany.getTenantId().toString()
         );
 
         // Registra métricas específicas (não cobertas pelo @LogOperation)
@@ -171,7 +171,7 @@ public class CompanyCommandService {
             updatedCompany.getId().toString(),
             updatedCompany.getCnpj(),
             updatedCompany.getCodeCompany().toString(),
-            updatedCompany.getXApplication().toString()
+            updatedCompany.getTenantId().toString()
         );
 
         // Registra métricas específicas (não cobertas pelo @LogOperation)
@@ -204,7 +204,7 @@ public class CompanyCommandService {
             updatedCompany.getId().toString(),
             updatedCompany.getCnpj(),
             updatedCompany.getCodeCompany().toString(),
-            updatedCompany.getXApplication().toString()
+            updatedCompany.getTenantId().toString()
         );
 
         // Registra métricas específicas (não cobertas pelo @LogOperation)
@@ -237,7 +237,7 @@ public class CompanyCommandService {
             updatedCompany.getId().toString(),
             updatedCompany.getCnpj(),
             updatedCompany.getCodeCompany().toString(),
-            updatedCompany.getXApplication().toString()
+            updatedCompany.getTenantId().toString()
         );
 
         // Registra métricas específicas (não cobertas pelo @LogOperation)
@@ -270,7 +270,7 @@ public class CompanyCommandService {
             updatedCompany.getId().toString(),
             updatedCompany.getCnpj(),
             updatedCompany.getCodeCompany().toString(),
-            updatedCompany.getXApplication().toString()
+            updatedCompany.getTenantId().toString()
         );
 
         // Registra métricas específicas (não cobertas pelo @LogOperation)
@@ -303,7 +303,7 @@ public class CompanyCommandService {
             updatedCompany.getId().toString(),
             updatedCompany.getCnpj(),
             updatedCompany.getCodeCompany().toString(),
-            updatedCompany.getXApplication().toString()
+            updatedCompany.getTenantId().toString()
         );
 
         // Registra métricas específicas (não cobertas pelo @LogOperation)

@@ -33,7 +33,7 @@ public class CompanyJpaMapper {
         CompanyJpaEntity entity = CompanyJpaEntity.builder()
                 .id(company.getId())
                 .codeCompany(company.getCodeCompany())
-                .xApplication(company.getXApplication())
+                .tenantId(company.getTenantId())
                 .name(company.getName())
                 .legalName(company.getLegalName())
                 .cnpj(company.getCnpj())
@@ -97,7 +97,7 @@ public class CompanyJpaMapper {
         Company company = Company.of(
                 entity.getId(),
                 entity.getCodeCompany(),
-                entity.getXApplication(),
+                entity.getTenantId(),
                 entity.getName(),
                 entity.getLegalName(),
                 entity.getCnpj(),
