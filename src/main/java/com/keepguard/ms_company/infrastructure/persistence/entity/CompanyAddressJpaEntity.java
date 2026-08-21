@@ -18,8 +18,9 @@ import java.util.UUID;
 public class CompanyAddressJpaEntity {
 
     @Id
-    @GeneratedValue(generator = "UUID")
+
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
