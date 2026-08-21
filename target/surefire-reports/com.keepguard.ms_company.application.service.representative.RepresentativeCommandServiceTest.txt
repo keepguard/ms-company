@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.keepguard.ms_company.application.service.representative.RepresentativeCommandServiceTest
+-------------------------------------------------------------------------------
+Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.063 s -- in com.keepguard.ms_company.application.service.representative.RepresentativeCommandServiceTest
