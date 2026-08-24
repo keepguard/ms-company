@@ -248,6 +248,36 @@ public class CompanyCommandService {
     }
 
     @LogOperation(
+        operation = "UPDATE_MFA_CHANNELS",
+        description = "Atualizando canais de MFA da empresa: {id}",
+        audit = true,
+        auditAction = "UPDATE",
+        auditEntityType = "COMPANY"
+    )
+    public CompanyViewDTO updateMfaChannels(UUID id, java.util.List<com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyMfaChannelRequestDTO> channels) {
+        Company company = companyRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Empresa não encontrada: " + id));
+
+        java.util.List<com.keepguard.ms_company.domain.entity.CompanyMfaChannel> domainChannels = channels != null ?
+            channels.stream()
+                .map(ch -> com.keepguard.ms_company.domain.entity.CompanyMfaChannel.create(ch.channel(), ch.required(), ch.enabled()))
+                .toList() : new java.util.ArrayList<>();
+
+        company.setMfaChannels(domainChannels);
+        Company savedCompany = companyRepository.save(company);
+
+        // Limpar e atualizar cache
+        companyCachePort.clearAllCompanyCache(
+            savedCompany.getId().toString(),
+            savedCompany.getCnpj(),
+            savedCompany.getCodeCompany().toString(),
+            savedCompany.getTenantId().toString()
+        );
+
+        return companyMapper.toViewDTO(savedCompany);
+    }
+
+    @LogOperation(
         operation = "SUSPEND_COMPANY",
         description = "Suspendo empresa: {id}",
         audit = true,

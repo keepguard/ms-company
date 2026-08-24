@@ -6,12 +6,14 @@ import com.keepguard.ms_company.domain.entity.BankAccount;
 import com.keepguard.ms_company.domain.entity.Contact;
 import com.keepguard.ms_company.domain.entity.Representative;
 import com.keepguard.ms_company.domain.entity.Cnae;
+import com.keepguard.ms_company.domain.entity.CompanyMfaChannel;
 import com.keepguard.ms_company.infrastructure.persistence.entity.CompanyJpaEntity;
 import com.keepguard.ms_company.infrastructure.persistence.entity.CompanyAddressJpaEntity;
 import com.keepguard.ms_company.infrastructure.persistence.entity.CompanyContactJpaEntity;
 import com.keepguard.ms_company.infrastructure.persistence.entity.CompanyRepresentativeJpaEntity;
 import com.keepguard.ms_company.infrastructure.persistence.entity.CompanyBankAccountJpaEntity;
 import com.keepguard.ms_company.infrastructure.persistence.entity.CompanyCnaeJpaEntity;
+import com.keepguard.ms_company.infrastructure.persistence.entity.CompanyMfaChannelJpaEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -86,6 +88,22 @@ public class CompanyJpaMapper {
             entity.getCnaes().add(cnaeEntity);
         });
 
+        // Mapear Canais de MFA
+        if (company.getMfaChannels() != null) {
+            company.getMfaChannels().forEach(ch -> {
+                CompanyMfaChannelJpaEntity chEntity = CompanyMfaChannelJpaEntity.builder()
+                        .id(ch.getId())
+                        .company(entity)
+                        .channel(ch.getChannel())
+                        .required(ch.isRequired())
+                        .enabled(ch.isEnabled())
+                        .createdAt(ch.getCreatedAt())
+                        .updatedAt(ch.getUpdatedAt())
+                        .build();
+                entity.getMfaChannels().add(chEntity);
+            });
+        }
+
         return entity;
     }
 
@@ -109,6 +127,21 @@ public class CompanyJpaMapper {
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()
         );
+
+        // Mapear Canais de MFA
+        if (entity.getMfaChannels() != null) {
+            entity.getMfaChannels().forEach(chEntity -> {
+                CompanyMfaChannel ch = CompanyMfaChannel.of(
+                        chEntity.getId(),
+                        chEntity.getChannel(),
+                        chEntity.isRequired(),
+                        chEntity.isEnabled(),
+                        chEntity.getCreatedAt(),
+                        chEntity.getUpdatedAt()
+                );
+                company.addMfaChannel(ch);
+            });
+        }
 
         // Mapear endereços
         if (entity.getAddresses() != null) {

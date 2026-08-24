@@ -42,8 +42,8 @@
         <logger name="com.keepguard.ms_company.application.service.CompanyQueryService" level="DEBUG"/>
         <logger name="org.springframework.web" level="WARN"/>
         <logger name="org.hibernate" level="WARN"/>
-        <logger name="org.springframework.data.jpa" level="WARN"/>
-        <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="WARN"/>
+        <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="DEBUG"/>
+        <logger name="com.keepguard.ms_company" level="DEBUG"/>
 
         <!-- Remover completamente logs técnicos para manter apenas operações lógicas -->
         <logger name="com.keepguard.lib_common.logging.service.LoggingService" level="OFF"/>

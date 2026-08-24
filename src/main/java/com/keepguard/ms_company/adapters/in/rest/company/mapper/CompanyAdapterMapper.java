@@ -7,6 +7,7 @@ import com.keepguard.ms_company.adapters.in.rest.contact.mapper.ContactAdapterMa
 import com.keepguard.ms_company.adapters.in.rest.representative.mapper.RepresentativeAdapterMapper;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyCreateDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanyMfaChannelResponseDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanyResponseDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanySimpleResponseDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyCreateCommandDTO;
@@ -89,6 +90,14 @@ public class CompanyAdapterMapper {
                 .bankAccount(view.bankAccount() != null ? bankAccountAdapterMapper.toCompanyBankAccountDTO(view.bankAccount()) : null)
                 .taxRegime(view.taxRegime())
                 .cnaes(view.cnaes() != null ? view.cnaes().stream().map(cnaeAdapterMapper::toResponseDTO).toList() : null)
+                .mfaChannels(view.mfaChannels() != null ? view.mfaChannels().stream()
+                    .map(ch -> CompanyMfaChannelResponseDTO.builder()
+                        .id(ch.id())
+                        .channel(ch.channel())
+                        .required(ch.required())
+                        .enabled(ch.enabled())
+                        .build())
+                    .toList() : null)
                 .ein(view.ein())
                 .status(view.status())
                 .createdAt(view.createdAt())

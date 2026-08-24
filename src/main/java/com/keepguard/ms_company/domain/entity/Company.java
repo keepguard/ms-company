@@ -28,6 +28,7 @@ public final class Company {
     private final List<Representative> representatives = new ArrayList<>();
     private final List<BankAccount> bankAccounts = new ArrayList<>();
     private final List<Cnae> cnaes = new ArrayList<>();
+    private final List<CompanyMfaChannel> mfaChannels = new ArrayList<>();
     private TaxRegimeEnum taxRegime;
     private String ein;
     private CompanyStatusEnum status;
@@ -109,11 +110,27 @@ public final class Company {
     public List<Representative> getRepresentatives() { return new ArrayList<>(representatives); }
     public List<BankAccount> getBankAccounts() { return new ArrayList<>(bankAccounts); }
     public List<Cnae> getCnaes() { return new ArrayList<>(cnaes); }
+    public List<CompanyMfaChannel> getMfaChannels() { return new ArrayList<>(mfaChannels); }
     public TaxRegimeEnum getTaxRegime() { return taxRegime; }
     public String getEin() { return ein; }
     public CompanyStatusEnum getStatus() { return status; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+
+    public void addMfaChannel(CompanyMfaChannel channel) {
+        if (channel != null) {
+            this.mfaChannels.removeIf(c -> c.getChannel() == channel.getChannel());
+            this.mfaChannels.add(channel);
+        }
+    }
+
+    public void setMfaChannels(List<CompanyMfaChannel> channels) {
+        this.mfaChannels.clear();
+        if (channels != null) {
+            this.mfaChannels.addAll(channels);
+        }
+        this.updatedAt = LocalDateTime.now();
+    }
 
     // Business methods
     public void approve() {

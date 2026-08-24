@@ -29,6 +29,8 @@ public interface CompanyPort {
 
     CompanyViewDTO block(UUID id);
 
+    CompanyViewDTO updateMfaChannels(UUID id, java.util.List<com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyMfaChannelRequestDTO> channels);
+
     void delete(UUID id);
 
     // === OPERAÇÕES DE CONSULTA ===

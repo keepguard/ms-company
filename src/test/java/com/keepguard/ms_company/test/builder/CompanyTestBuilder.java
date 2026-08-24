@@ -183,6 +183,7 @@ public class CompanyTestBuilder {
             null, // bankAccount
             taxRegime,
             new java.util.ArrayList<>(), // cnaes
+            new java.util.ArrayList<>(), // mfaChannels
             stateRegistration, // ein
             status,
             createdAt,
@@ -252,6 +253,7 @@ public class CompanyTestBuilder {
             null, // bankAccount
             taxRegime,
             new java.util.ArrayList<>(), // cnaes
+            new java.util.ArrayList<>(), // mfaChannels
             stateRegistration, // ein
             status,
             createdAt,

@@ -6,6 +6,7 @@ import com.keepguard.ms_company.application.port.out.persistence.CompanyReposito
 import com.keepguard.ms_company.domain.entity.Company;
 import com.keepguard.ms_company.domain.enums.CompanyStatusEnum;
 import com.keepguard.ms_company.infrastructure.persistence.entity.CompanyJpaEntity;
+import com.keepguard.ms_company.infrastructure.persistence.entity.CompanyMfaChannelJpaEntity;
 import com.keepguard.ms_company.infrastructure.persistence.mapper.CompanyJpaMapper;
 import com.keepguard.ms_company.infrastructure.persistence.spring.CompanySpringRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,51 @@ public class CompanyRepositoryAdapter implements CompanyRepositoryPort {
 
     @Override
     public Company save(Company company) {
+        if (company.getId() != null) {
+            var existingOpt = springRepository.findById(company.getId());
+            if (existingOpt.isPresent()) {
+                var entity = existingOpt.get();
+                entity.setName(company.getName());
+                entity.setLegalName(company.getLegalName());
+                entity.setCnpj(company.getCnpj());
+                entity.setStateRegistration(company.getStateRegistration());
+                entity.setMunicipalRegistration(company.getMunicipalRegistration());
+                entity.setTaxRegime(company.getTaxRegime());
+                entity.setEin(company.getEin());
+                entity.setStatus(company.getStatus());
+
+                // Atualizar Canais de MFA
+                if (company.getMfaChannels() != null) {
+                    var targetChannels = company.getMfaChannels();
+                    // Remove canais que não estão mais na lista de destino
+                    entity.getMfaChannels().removeIf(existing -> 
+                        targetChannels.stream().noneMatch(tc -> tc.getChannel() == existing.getChannel())
+                    );
+                    // Atualiza existentes ou adiciona novos
+                    for (var tc : targetChannels) {
+                        var existingChannelOpt = entity.getMfaChannels().stream()
+                            .filter(e -> e.getChannel() == tc.getChannel())
+                            .findFirst();
+                        if (existingChannelOpt.isPresent()) {
+                            var existing = existingChannelOpt.get();
+                            existing.setRequired(tc.isRequired());
+                            existing.setEnabled(tc.isEnabled());
+                        } else {
+                            CompanyMfaChannelJpaEntity chEntity = CompanyMfaChannelJpaEntity.builder()
+                                    .company(entity)
+                                    .channel(tc.getChannel())
+                                    .required(tc.isRequired())
+                                    .enabled(tc.isEnabled())
+                                    .build();
+                            entity.getMfaChannels().add(chEntity);
+                        }
+                    }
+                }
+
+                var savedEntity = springRepository.save(entity);
+                return mapper.toDomain(savedEntity);
+            }
+        }
         var entity = mapper.toEntity(company);
         var savedEntity = springRepository.save(entity);
         return mapper.toDomain(savedEntity);

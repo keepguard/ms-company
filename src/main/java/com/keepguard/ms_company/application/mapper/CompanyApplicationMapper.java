@@ -2,6 +2,7 @@ package com.keepguard.ms_company.application.mapper;
 
 import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanySimpleResponseDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyCreateCommandDTO;
+import com.keepguard.ms_company.application.dto.company.CompanyMfaChannelViewDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyViewDTO;
 import com.keepguard.ms_company.domain.entity.Company;
@@ -85,6 +86,10 @@ public class CompanyApplicationMapper {
                 null, // bankAccount - será preenchido separadamente
                 company.getTaxRegime(),
                 null, // cnaes - será preenchido separadamente
+                company.getMfaChannels() != null ?
+                    company.getMfaChannels().stream()
+                        .map(ch -> new CompanyMfaChannelViewDTO(ch.getId(), ch.getChannel(), ch.isRequired(), ch.isEnabled()))
+                        .toList() : null,
                 company.getEin(),
                 company.getStatus(),
                 company.getCreatedAt(),

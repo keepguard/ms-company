@@ -27,6 +27,7 @@ public record CompanyViewDTO(
     BankAccountViewDTO bankAccount,
     TaxRegimeEnum taxRegime,
     List<CnaeViewDTO> cnaes,
+    List<CompanyMfaChannelViewDTO> mfaChannels,
     String ein,
     CompanyStatusEnum status,
     LocalDateTime createdAt,

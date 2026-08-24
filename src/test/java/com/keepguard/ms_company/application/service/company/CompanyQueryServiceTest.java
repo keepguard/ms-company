@@ -78,6 +78,7 @@ class CompanyQueryServiceTest {
             null, // bankAccount
             TaxRegimeEnum.SIMPLES_NACIONAL,
             new ArrayList<>(),
+            new ArrayList<>(),
             "123456789",
             CompanyStatusEnum.PENDING_APPROVAL,
             LocalDateTime.now(),
@@ -478,6 +479,7 @@ class CompanyQueryServiceTest {
             "123456789",
             null, null, null, null,
             TaxRegimeEnum.LUCRO_REAL,
+            new ArrayList<>(),
             new ArrayList<>(),
             "987654321",
             CompanyStatusEnum.ACTIVE,

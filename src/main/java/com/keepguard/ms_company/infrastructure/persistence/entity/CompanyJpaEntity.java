@@ -74,6 +74,11 @@ public class CompanyJpaEntity {
     @Builder.Default
     private List<CompanyCnaeJpaEntity> cnaes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 10)
+    @Builder.Default
+    private List<CompanyMfaChannelJpaEntity> mfaChannels = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     @Column(name = "tax_regime", nullable = false)
     private TaxRegimeEnum taxRegime;

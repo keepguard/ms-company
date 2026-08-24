@@ -257,6 +257,22 @@ public class CompanyController {
     }
 
 
+    @PutMapping("/{id}/mfa-channels")
+    @MetricsEndpoint(endpoint = "company_update_mfa_channels", operation = "Atualizar canais de MFA da empresa")
+    @Operation(summary = "Atualizar canais de MFA", description = "Atualiza os canais de MFA (SMS, EMAIL, WHATSAPP) exigidos pela empresa")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Canais de MFA atualizados com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
+    })
+    public ResponseEntity<CompanyResponseDTO> updateMfaChannels(
+            @Parameter(description = "ID da empresa") @PathVariable UUID id,
+            @Valid @RequestBody java.util.List<com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyMfaChannelRequestDTO> channels) {
+        log.info("Atualizando canais de MFA da empresa ID: {}", id);
+        CompanyViewDTO view = companyPort.updateMfaChannels(id, channels);
+        CompanyResponseDTO response = companyAdapterMapper.toResponseDTO(view);
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping("/{id}")
     @MetricsEndpoint(endpoint = "company_delete", operation = "Remover empresa")
     @Operation(summary = "Remover empresa", description = "Remove uma empresa do sistema")

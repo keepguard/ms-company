@@ -64,6 +64,11 @@ public class CompanyUseCaseService implements CompanyPort {
     }
 
     @Override
+    public CompanyViewDTO updateMfaChannels(UUID id, java.util.List<com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyMfaChannelRequestDTO> channels) {
+        return commandService.updateMfaChannels(id, channels);
+    }
+
+    @Override
     public void delete(UUID id) {
         commandService.delete(id);
     }

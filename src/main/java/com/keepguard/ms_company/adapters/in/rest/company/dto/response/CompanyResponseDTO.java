@@ -36,6 +36,7 @@ public class CompanyResponseDTO {
     private BankAccountDTO bankAccount;
     private TaxRegimeEnum taxRegime;
     private List<CnaeResponseDTO> cnaes;
+    private List<CompanyMfaChannelResponseDTO> mfaChannels;
     private String ein;
     private CompanyStatusEnum status;
     private LocalDateTime createdAt;

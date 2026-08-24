@@ -255,6 +255,7 @@ public class CompanyCacheService implements CompanyCachePort {
             removeCompanyFromCacheById(companyId);
             removeCompanyFromCacheByCnpj(cnpj);
             removeCompanyFromCacheByCodeCompany(codeCompany);
+            removeCompanyFromCacheByTenantId(tenantId);
             removeSimpleCompanyFromCacheById(companyId);
             removeSimpleCompanyFromCacheByTenantId(tenantId);
             
