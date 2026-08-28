@@ -179,7 +179,7 @@ public class CompanyQueryService {
             CompanyViewDTO cachedCompany = companyCachePort.getCompanyByTenantIdFromCache(tenantId.toString());
             if (cachedCompany != null) {
                 metricsPort.incrementCounter("company_queries_total",
-                    Map.of("query_type", "GET_BY_X_APPLICATION", "status", "CACHE_HIT"));
+                    Map.of("query_type", "GET_BY_TENANT_ID", "status", "CACHE_HIT"));
                 return cachedCompany;
             }
 
@@ -204,7 +204,7 @@ public class CompanyQueryService {
             companyCachePort.cacheCompanyByTenantId(tenantId.toString(), companyView);
 
             metricsPort.incrementCounter("company_queries_total",
-                Map.of("query_type", "GET_BY_X_APPLICATION", "status", "SUCCESS"));
+                Map.of("query_type", "GET_BY_TENANT_ID", "status", "SUCCESS"));
 
             return companyView;
 
@@ -214,7 +214,7 @@ public class CompanyQueryService {
         } catch (Exception e) {
             log.error("Erro ao buscar empresa por TenantId: {} - Erro: {}", tenantId, e.getMessage(), e);
             metricsPort.incrementCounter("company_queries_total",
-                Map.of("query_type", "GET_BY_X_APPLICATION", "status", "ERROR"));
+                Map.of("query_type", "GET_BY_TENANT_ID", "status", "ERROR"));
             throw new RuntimeException("Erro interno ao buscar empresa por TenantId", e);
         }
     }
@@ -225,7 +225,7 @@ public class CompanyQueryService {
             CompanySimpleResponseDTO cachedCompany = companyCachePort.getSimpleCompanyByTenantIdFromCache(tenantId.toString());
             if (cachedCompany != null) {
                 metricsPort.incrementCounter("company_queries_total",
-                    Map.of("query_type", "GET_SIMPLE_BY_X_APPLICATION", "status", "CACHE_HIT"));
+                    Map.of("query_type", "GET_SIMPLE_BY_TENANT_ID", "status", "CACHE_HIT"));
                 return cachedCompany;
             }
 
@@ -251,7 +251,7 @@ public class CompanyQueryService {
             companyCachePort.cacheSimpleCompanyByTenantId(tenantId.toString(), simpleResponse);
 
             metricsPort.incrementCounter("company_queries_total",
-                Map.of("query_type", "GET_SIMPLE_BY_X_APPLICATION", "status", "SUCCESS"));
+                Map.of("query_type", "GET_SIMPLE_BY_TENANT_ID", "status", "SUCCESS"));
 
             return simpleResponse;
 
@@ -261,7 +261,7 @@ public class CompanyQueryService {
         } catch (Exception e) {
             log.error("Erro ao buscar empresa simples por TenantId: {} - Erro: {}", tenantId, e.getMessage(), e);
             metricsPort.incrementCounter("company_queries_total",
-                Map.of("query_type", "GET_SIMPLE_BY_X_APPLICATION", "status", "ERROR"));
+                Map.of("query_type", "GET_SIMPLE_BY_TENANT_ID", "status", "ERROR"));
             throw new RuntimeException("Erro interno ao buscar empresa simples por TenantId", e);
         }
     }

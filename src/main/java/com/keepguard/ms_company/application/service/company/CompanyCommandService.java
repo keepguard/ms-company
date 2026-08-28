@@ -13,6 +13,7 @@ import com.keepguard.ms_company.domain.entity.Company;
 import com.keepguard.ms_company.application.port.out.cache.CompanyCachePort;
 import com.keepguard.lib_common.exception.ValidationException;
 import com.keepguard.ms_company.application.port.out.metrics.MetricsPort;
+import com.keepguard.ms_company.application.port.out.auth.AuthRoleProvisionPort;
 import com.keepguard.lib_common.logging.annotation.LogOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ public class CompanyCommandService {
     private final CompanyApplicationMapper companyMapper;
     private final CompanyCachePort companyCachePort;
     private final MetricsPort metricsPort;
+    private final AuthRoleProvisionPort authRoleProvisionPort;
 
     @LogOperation(
         operation = "CREATE_COMPANY",
@@ -59,6 +61,8 @@ public class CompanyCommandService {
 
         Company company = companyMapper.toDomain(command);
         Company savedCompany = saveCompany(company);
+
+        authRoleProvisionPort.provisionCompanyRoles(savedCompany.getId());
 
         // Registra métricas específicas (não cobertas pelo @LogOperation)
         metricsPort.incrementCounter("company_created_total",

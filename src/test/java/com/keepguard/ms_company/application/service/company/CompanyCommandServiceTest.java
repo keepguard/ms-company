@@ -15,6 +15,7 @@ import com.keepguard.ms_company.domain.enums.CompanyStatusEnum;
 import com.keepguard.ms_company.domain.enums.TaxRegimeEnum;
 import com.keepguard.ms_company.application.port.out.cache.CompanyCachePort;
 import com.keepguard.ms_company.application.port.out.metrics.MetricsPort;
+import com.keepguard.ms_company.application.port.out.auth.AuthRoleProvisionPort;
 import com.keepguard.ms_company.test.builder.CompanyTestBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -55,6 +56,9 @@ class CompanyCommandServiceTest {
     
     @Mock
     private MetricsPort metricsPort;
+
+    @Mock
+    private AuthRoleProvisionPort authRoleProvisionPort;
     
     @InjectMocks
     private CompanyCommandService companyCommandService;
@@ -107,6 +111,7 @@ class CompanyCommandServiceTest {
         verify(companyRepository).existsByCnpj("98765432000198");
         verify(companyMapper).toDomain(command);
         verify(companyRepository).save(company);
+        verify(authRoleProvisionPort).provisionCompanyRoles(any(UUID.class));
         verify(companyMapper).toViewDTO(company);
         verify(metricsPort).incrementCounter(eq("company_created_total"), any());
     }
