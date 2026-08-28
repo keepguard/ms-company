@@ -30,18 +30,13 @@ public class CompanyCacheService implements CompanyCachePort {
     @Value("${cache.redis.ttl.company:2592000}")
     private long companyTtlSeconds;
 
-    @Value("${cache.redis.prefix.company:company_cache:}")
+    @Value("${cache.redis.prefix.company:company_cache}")
     private String companyCachePrefix;
-
-    static final String SEGMENT_TENANT = "tenantId:";
-    static final String SEGMENT_TENANT_LEGACY = "xapp:";
-    static final String SEGMENT_SIMPLE_TENANT = "simple:tenantId:";
-    static final String SEGMENT_SIMPLE_TENANT_LEGACY = "simple:xapp:";
 
     @CircuitBreaker(name = "redisCache")
     public void cacheCompanyById(String companyId, CompanyViewDTO company) {
         try {
-            String key = companyCachePrefix + "id:" + companyId;
+            String key = idKey(companyId);
             String value = objectMapper.writeValueAsString(company);
             redisTemplate.opsForValue().set(key, value, companyTtlSeconds, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -53,7 +48,7 @@ public class CompanyCacheService implements CompanyCachePort {
     @Retry(name = "redisCache")
     public CompanyViewDTO getCompanyByIdFromCache(String companyId) {
         try {
-            String key = companyCachePrefix + "id:" + companyId;
+            String key = idKey(companyId);
             String value = redisTemplate.opsForValue().get(key);
             if (value != null) {
                 return objectMapper.readValue(value, CompanyViewDTO.class);
@@ -67,7 +62,7 @@ public class CompanyCacheService implements CompanyCachePort {
     @CircuitBreaker(name = "redisCache")
     public void cacheCompanyByCnpj(String cnpj, CompanyViewDTO company) {
         try {
-            String key = companyCachePrefix + "cnpj:" + cnpj;
+            String key = cnpjKey(cnpj);
             String value = objectMapper.writeValueAsString(company);
             redisTemplate.opsForValue().set(key, value, companyTtlSeconds, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -79,7 +74,7 @@ public class CompanyCacheService implements CompanyCachePort {
     @Retry(name = "redisCache")
     public CompanyViewDTO getCompanyByCnpjFromCache(String cnpj) {
         try {
-            String key = companyCachePrefix + "cnpj:" + cnpj;
+            String key = cnpjKey(cnpj);
             String value = redisTemplate.opsForValue().get(key);
             if (value != null) {
                 return objectMapper.readValue(value, CompanyViewDTO.class);
@@ -93,7 +88,7 @@ public class CompanyCacheService implements CompanyCachePort {
     @CircuitBreaker(name = "redisCache")
     public void cacheCompanyByCodeCompany(String codeCompany, CompanyViewDTO company) {
         try {
-            String key = companyCachePrefix + "code:" + codeCompany;
+            String key = codeKey(codeCompany);
             String value = objectMapper.writeValueAsString(company);
             redisTemplate.opsForValue().set(key, value, companyTtlSeconds, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -105,7 +100,7 @@ public class CompanyCacheService implements CompanyCachePort {
     @Retry(name = "redisCache")
     public CompanyViewDTO getCompanyByCodeCompanyFromCache(String codeCompany) {
         try {
-            String key = companyCachePrefix + "code:" + codeCompany;
+            String key = codeKey(codeCompany);
             String value = redisTemplate.opsForValue().get(key);
             if (value != null) {
                 return objectMapper.readValue(value, CompanyViewDTO.class);
@@ -119,7 +114,7 @@ public class CompanyCacheService implements CompanyCachePort {
     @CircuitBreaker(name = "redisCache")
     public void removeCompanyFromCacheById(String companyId) {
         try {
-            String key = companyCachePrefix + "id:" + companyId;
+            String key = idKey(companyId);
             redisTemplate.delete(key);
         } catch (Exception e) {
             log.warn("Falha ao remover empresa do cache por ID | key={}", companyId);
@@ -129,7 +124,7 @@ public class CompanyCacheService implements CompanyCachePort {
     @CircuitBreaker(name = "redisCache")
     public void removeCompanyFromCacheByCnpj(String cnpj) {
         try {
-            String key = companyCachePrefix + "cnpj:" + cnpj;
+            String key = cnpjKey(cnpj);
             redisTemplate.delete(key);
         } catch (Exception e) {
             log.warn("Falha ao remover empresa do cache por CNPJ | key={}", cnpj);
@@ -139,7 +134,7 @@ public class CompanyCacheService implements CompanyCachePort {
     @CircuitBreaker(name = "redisCache")
     public void removeCompanyFromCacheByCodeCompany(String codeCompany) {
         try {
-            String key = companyCachePrefix + "code:" + codeCompany;
+            String key = codeKey(codeCompany);
             redisTemplate.delete(key);
         } catch (Exception e) {
             log.warn("Falha ao remover empresa do cache por CodeCompany | key={}", codeCompany);
@@ -161,7 +156,7 @@ public class CompanyCacheService implements CompanyCachePort {
     @Retry(name = "redisCache")
     public CompanyViewDTO getCompanyByTenantIdFromCache(String tenantId) {
         try {
-            String value = getWithLegacyFallback(tenantKey(tenantId), legacyTenantKey(tenantId));
+            String value = redisTemplate.opsForValue().get(tenantKey(tenantId));
             if (value != null) {
                 return objectMapper.readValue(value, CompanyViewDTO.class);
             }
@@ -175,7 +170,6 @@ public class CompanyCacheService implements CompanyCachePort {
     public void removeCompanyFromCacheByTenantId(String tenantId) {
         try {
             redisTemplate.delete(tenantKey(tenantId));
-            redisTemplate.delete(legacyTenantKey(tenantId));
         } catch (Exception e) {
             log.warn("Falha ao remover empresa do cache por TenantId | key={}", tenantId);
         }
@@ -184,7 +178,7 @@ public class CompanyCacheService implements CompanyCachePort {
     @CircuitBreaker(name = "redisCache")
     public void cacheSimpleCompanyById(String companyId, CompanySimpleResponseDTO company) {
         try {
-            String key = companyCachePrefix + "simple:id:" + companyId;
+            String key = simpleIdKey(companyId);
             String value = objectMapper.writeValueAsString(company);
             redisTemplate.opsForValue().set(key, value, companyTtlSeconds, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -196,7 +190,7 @@ public class CompanyCacheService implements CompanyCachePort {
     @Retry(name = "redisCache")
     public CompanySimpleResponseDTO getSimpleCompanyByIdFromCache(String companyId) {
         try {
-            String key = companyCachePrefix + "simple:id:" + companyId;
+            String key = simpleIdKey(companyId);
             String value = redisTemplate.opsForValue().get(key);
             if (value != null) {
                 return objectMapper.readValue(value, CompanySimpleResponseDTO.class);
@@ -210,7 +204,7 @@ public class CompanyCacheService implements CompanyCachePort {
     @CircuitBreaker(name = "redisCache")
     public void removeSimpleCompanyFromCacheById(String companyId) {
         try {
-            String key = companyCachePrefix + "simple:id:" + companyId;
+            String key = simpleIdKey(companyId);
             redisTemplate.delete(key);
         } catch (Exception e) {
             log.warn("Falha ao remover empresa simples do cache por ID | key={}", companyId);
@@ -232,7 +226,7 @@ public class CompanyCacheService implements CompanyCachePort {
     @Retry(name = "redisCache")
     public CompanySimpleResponseDTO getSimpleCompanyByTenantIdFromCache(String tenantId) {
         try {
-            String value = getWithLegacyFallback(simpleTenantKey(tenantId), legacySimpleTenantKey(tenantId));
+            String value = redisTemplate.opsForValue().get(simpleTenantKey(tenantId));
             if (value != null) {
                 return objectMapper.readValue(value, CompanySimpleResponseDTO.class);
             }
@@ -246,7 +240,6 @@ public class CompanyCacheService implements CompanyCachePort {
     public void removeSimpleCompanyFromCacheByTenantId(String tenantId) {
         try {
             redisTemplate.delete(simpleTenantKey(tenantId));
-            redisTemplate.delete(legacySimpleTenantKey(tenantId));
         } catch (Exception e) {
             log.warn("Falha ao remover empresa simples do cache por TenantId | key={}", tenantId);
         }
@@ -290,28 +283,47 @@ public class CompanyCacheService implements CompanyCachePort {
         }
     }
 
-    private String tenantKey(String tenantId) {
-        return companyCachePrefix + SEGMENT_TENANT + tenantId;
+    private String basePrefix() {
+        if (companyCachePrefix == null || companyCachePrefix.isBlank()) {
+            return "company_cache";
+        }
+        return companyCachePrefix.replaceAll(":+$", "");
     }
 
-    private String legacyTenantKey(String tenantId) {
-        return companyCachePrefix + SEGMENT_TENANT_LEGACY + tenantId;
+    private String lookupKey(String lookup, String id) {
+        return basePrefix() + ":" + lookup + ":" + id;
+    }
+
+    private String idKey(String companyId) {
+        return lookupKey("id", normalize(companyId));
+    }
+
+    private String cnpjKey(String cnpj) {
+        return lookupKey("cnpj", digitsOnly(cnpj));
+    }
+
+    private String codeKey(String codeCompany) {
+        return lookupKey("code", normalize(codeCompany));
+    }
+
+    private String tenantKey(String tenantId) {
+        return lookupKey("tenantId", normalize(tenantId));
+    }
+
+    private String simpleIdKey(String companyId) {
+        return lookupKey("simple:id", normalize(companyId));
     }
 
     private String simpleTenantKey(String tenantId) {
-        return companyCachePrefix + SEGMENT_SIMPLE_TENANT + tenantId;
+        return lookupKey("simple:tenantId", normalize(tenantId));
     }
 
-    private String legacySimpleTenantKey(String tenantId) {
-        return companyCachePrefix + SEGMENT_SIMPLE_TENANT_LEGACY + tenantId;
+    private String normalize(String value) {
+        return value == null ? "" : value.trim().toLowerCase();
     }
 
-    private String getWithLegacyFallback(String currentKey, String legacyKey) {
-        String value = redisTemplate.opsForValue().get(currentKey);
-        if (value != null) {
-            return value;
-        }
-        return redisTemplate.opsForValue().get(legacyKey);
+    private String digitsOnly(String cnpj) {
+        return cnpj == null ? "" : cnpj.replaceAll("\\D", "");
     }
 
     private CompanyViewDTO getCompanyFallback(String param, Exception ex) {

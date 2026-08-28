@@ -62,11 +62,11 @@ cache:
       contact: 2592000     # 30 dias
       representative: 2592000 # 30 dias
     prefix:
-      company: "company_cache:"
-      address: "address_cache:"
-      bank-account: "bank_account_cache:"
-      contact: "contact_cache:"
-      representative: "representative_cache:"
+      company: "company_cache"
+      address: "address_cache"
+      bank-account: "bank_account_cache"
+      contact: "contact_cache"
+      representative: "representative_cache"
 
 springdoc:
   swagger-ui:

@@ -25,13 +25,13 @@ public class RepresentativeCacheService implements RepresentativeCachePort {
     @Value("${cache.redis.ttl.representative:2592000}")
     private long representativeTtlSeconds;
 
-    @Value("${cache.redis.prefix.representative:representative_cache:}")
+    @Value("${cache.redis.prefix.representative:representative_cache}")
     private String representativeCachePrefix;
 
     @CircuitBreaker(name = "redisCache")
     public void cacheRepresentativesByCompanyId(String companyId, List<RepresentativeViewDTO> representatives) {
         try {
-            String key = representativeCachePrefix + "company:" + companyId;
+            String key = companyKey(companyId);
             String value = objectMapper.writeValueAsString(representatives);
             redisTemplate.opsForValue().set(key, value, representativeTtlSeconds, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class RepresentativeCacheService implements RepresentativeCachePort {
     @Retry(name = "redisCache")
     public List<RepresentativeViewDTO> getRepresentativesByCompanyIdFromCache(String companyId) {
         try {
-            String key = representativeCachePrefix + "company:" + companyId;
+            String key = companyKey(companyId);
             String value = redisTemplate.opsForValue().get(key);
             if (value != null) {
                 return objectMapper.readValue(value, objectMapper.getTypeFactory().constructCollectionType(List.class, RepresentativeViewDTO.class));
@@ -57,7 +57,7 @@ public class RepresentativeCacheService implements RepresentativeCachePort {
     @CircuitBreaker(name = "redisCache")
     public void cacheActiveRepresentativeByCompanyId(String companyId, RepresentativeViewDTO representative) {
         try {
-            String key = representativeCachePrefix + "company:" + companyId + ":active";
+            String key = activeCompanyKey(companyId);
             String value = objectMapper.writeValueAsString(representative);
             redisTemplate.opsForValue().set(key, value, representativeTtlSeconds, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -69,7 +69,7 @@ public class RepresentativeCacheService implements RepresentativeCachePort {
     @Retry(name = "redisCache")
     public RepresentativeViewDTO getActiveRepresentativeByCompanyIdFromCache(String companyId) {
         try {
-            String key = representativeCachePrefix + "company:" + companyId + ":active";
+            String key = activeCompanyKey(companyId);
             String value = redisTemplate.opsForValue().get(key);
             if (value != null) {
                 return objectMapper.readValue(value, RepresentativeViewDTO.class);
@@ -83,8 +83,8 @@ public class RepresentativeCacheService implements RepresentativeCachePort {
     @CircuitBreaker(name = "redisCache")
     public void removeRepresentativesFromCacheByCompanyId(String companyId) {
         try {
-            String key = representativeCachePrefix + "company:" + companyId;
-            String activeKey = representativeCachePrefix + "company:" + companyId + ":active";
+            String key = companyKey(companyId);
+            String activeKey = activeCompanyKey(companyId);
             redisTemplate.delete(key);
             redisTemplate.delete(activeKey);
         } catch (Exception e) {
@@ -100,6 +100,25 @@ public class RepresentativeCacheService implements RepresentativeCachePort {
     private RepresentativeViewDTO getRepresentativeFallback(String companyId, Exception ex) {
         log.warn("FALLBACK: Redis indisponivel");
         return null;
+    }
+
+    private String basePrefix() {
+        if (representativeCachePrefix == null || representativeCachePrefix.isBlank()) {
+            return "representative_cache";
+        }
+        return representativeCachePrefix.replaceAll(":+$", "");
+    }
+
+    private String companyKey(String companyId) {
+        return basePrefix() + ":company:" + normalize(companyId);
+    }
+
+    private String activeCompanyKey(String companyId) {
+        return companyKey(companyId) + ":active";
+    }
+
+    private String normalize(String value) {
+        return value == null ? "" : value.trim().toLowerCase();
     }
 }
 

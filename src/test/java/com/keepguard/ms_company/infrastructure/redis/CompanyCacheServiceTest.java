@@ -76,7 +76,7 @@ class CompanyCacheServiceTest {
     }
 
     @Test
-    @DisplayName("Deve gravar empresa na chave tenantId e não na chave xapp")
+    @DisplayName("Deve gravar empresa na chave tenantId")
     void deveGravarEmpresaNaChaveTenantId() throws Exception {
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
         when(objectMapper.writeValueAsString(companyView)).thenReturn("{\"id\":\"1\"}");
@@ -84,49 +84,64 @@ class CompanyCacheServiceTest {
         companyCacheService.cacheCompanyByTenantId(tenantId, companyView);
 
         verify(valueOperations).set(
-                eq(PREFIX + "tenantId:" + tenantId),
+                eq("company_cache:tenantId:" + tenantId),
                 eq("{\"id\":\"1\"}"),
                 eq(TTL),
                 eq(TimeUnit.SECONDS));
-        verify(valueOperations, never()).set(eq(PREFIX + "xapp:" + tenantId), anyString(), anyLong(), eq(TimeUnit.SECONDS));
+        verify(valueOperations, never()).set(eq("company_cache:xapp:" + tenantId), anyString(), anyLong(), eq(TimeUnit.SECONDS));
     }
 
     @Test
     @DisplayName("Deve ler empresa pela chave tenantId")
     void deveLerEmpresaPelaChaveTenantId() throws Exception {
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
-        when(valueOperations.get(PREFIX + "tenantId:" + tenantId)).thenReturn("{\"id\":\"1\"}");
+        when(valueOperations.get("company_cache:tenantId:" + tenantId)).thenReturn("{\"id\":\"1\"}");
         when(objectMapper.readValue("{\"id\":\"1\"}", CompanyViewDTO.class)).thenReturn(companyView);
 
         CompanyViewDTO result = companyCacheService.getCompanyByTenantIdFromCache(tenantId);
 
         assertThat(result).isEqualTo(companyView);
-        verify(valueOperations).get(PREFIX + "tenantId:" + tenantId);
-        verify(valueOperations, never()).get(PREFIX + "xapp:" + tenantId);
+        verify(valueOperations).get("company_cache:tenantId:" + tenantId);
+        verify(valueOperations, never()).get("company_cache:xapp:" + tenantId);
     }
 
     @Test
-    @DisplayName("Deve fazer fallback para a chave xapp quando tenantId não existir")
-    void deveFazerFallbackParaChaveLegadaXapp() throws Exception {
+    @DisplayName("Deve normalizar tenantId para lowercase na chave")
+    void deveNormalizarTenantIdParaLowercase() throws Exception {
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
-        when(valueOperations.get(PREFIX + "tenantId:" + tenantId)).thenReturn(null);
-        when(valueOperations.get(PREFIX + "xapp:" + tenantId)).thenReturn("{\"id\":\"legacy\"}");
-        when(objectMapper.readValue("{\"id\":\"legacy\"}", CompanyViewDTO.class)).thenReturn(companyView);
+        when(objectMapper.writeValueAsString(companyView)).thenReturn("{\"id\":\"1\"}");
 
-        CompanyViewDTO result = companyCacheService.getCompanyByTenantIdFromCache(tenantId);
+        companyCacheService.cacheCompanyByTenantId("TENANT-ABC", companyView);
 
-        assertThat(result).isEqualTo(companyView);
-        verify(valueOperations).get(PREFIX + "tenantId:" + tenantId);
-        verify(valueOperations).get(PREFIX + "xapp:" + tenantId);
+        verify(valueOperations).set(
+                eq("company_cache:tenantId:tenant-abc"),
+                eq("{\"id\":\"1\"}"),
+                eq(TTL),
+                eq(TimeUnit.SECONDS));
     }
 
     @Test
-    @DisplayName("Deve apagar chaves tenantId e xapp ao remover por tenant")
-    void deveApagarChavesAtualELegadaAoRemover() {
+    @DisplayName("Deve gravar CNPJ somente com dígitos na chave")
+    void deveGravarCnpjSomenteComDigitos() throws Exception {
+        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
+        when(objectMapper.writeValueAsString(companyView)).thenReturn("{\"id\":\"1\"}");
+
+        companyCacheService.cacheCompanyByCnpj("12.345.678/0001-90", companyView);
+
+        verify(valueOperations).set(
+                eq("company_cache:cnpj:12345678000190"),
+                eq("{\"id\":\"1\"}"),
+                eq(TTL),
+                eq(TimeUnit.SECONDS));
+    }
+
+    @Test
+    @DisplayName("Deve apagar apenas a chave tenantId ao remover por tenant")
+    void deveApagarChaveTenantIdAoRemover() {
         companyCacheService.removeCompanyFromCacheByTenantId(tenantId);
 
-        verify(redisTemplate).delete(PREFIX + "tenantId:" + tenantId);
-        verify(redisTemplate).delete(PREFIX + "xapp:" + tenantId);
+        verify(redisTemplate).delete("company_cache:tenantId:" + tenantId);
+        verify(redisTemplate, never()).delete("company_cache:xapp:" + tenantId);
     }
 
     @Test
@@ -138,38 +153,23 @@ class CompanyCacheServiceTest {
         companyCacheService.cacheSimpleCompanyByTenantId(tenantId, simpleView);
 
         verify(valueOperations).set(
-                eq(PREFIX + "simple:tenantId:" + tenantId),
+                eq("company_cache:simple:tenantId:" + tenantId),
                 eq("{\"name\":\"Empresa\"}"),
                 eq(TTL),
                 eq(TimeUnit.SECONDS));
         verify(valueOperations, never()).set(
-                eq(PREFIX + "simple:xapp:" + tenantId),
+                eq("company_cache:simple:xapp:" + tenantId),
                 anyString(),
                 anyLong(),
                 eq(TimeUnit.SECONDS));
     }
 
     @Test
-    @DisplayName("Deve fazer fallback para simple:xapp quando simple:tenantId não existir")
-    void deveFazerFallbackParaChaveSimplesLegada() throws Exception {
-        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
-        when(valueOperations.get(PREFIX + "simple:tenantId:" + tenantId)).thenReturn(null);
-        when(valueOperations.get(PREFIX + "simple:xapp:" + tenantId)).thenReturn("{\"name\":\"legacy\"}");
-        when(objectMapper.readValue("{\"name\":\"legacy\"}", CompanySimpleResponseDTO.class)).thenReturn(simpleView);
-
-        CompanySimpleResponseDTO result = companyCacheService.getSimpleCompanyByTenantIdFromCache(tenantId);
-
-        assertThat(result).isEqualTo(simpleView);
-        verify(valueOperations).get(PREFIX + "simple:tenantId:" + tenantId);
-        verify(valueOperations).get(PREFIX + "simple:xapp:" + tenantId);
-    }
-
-    @Test
-    @DisplayName("Deve apagar chaves simple:tenantId e simple:xapp ao remover")
-    void deveApagarChavesSimplesAtualELegadaAoRemover() {
+    @DisplayName("Deve apagar apenas a chave simple:tenantId ao remover")
+    void deveApagarChaveSimplesAoRemover() {
         companyCacheService.removeSimpleCompanyFromCacheByTenantId(tenantId);
 
-        verify(redisTemplate).delete(PREFIX + "simple:tenantId:" + tenantId);
-        verify(redisTemplate).delete(PREFIX + "simple:xapp:" + tenantId);
+        verify(redisTemplate).delete("company_cache:simple:tenantId:" + tenantId);
+        verify(redisTemplate, never()).delete("company_cache:simple:xapp:" + tenantId);
     }
 }

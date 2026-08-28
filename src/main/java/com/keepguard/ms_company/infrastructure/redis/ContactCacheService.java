@@ -25,13 +25,13 @@ public class ContactCacheService implements ContactCachePort {
     @Value("${cache.redis.ttl.contact:2592000}")
     private long contactTtlSeconds;
 
-    @Value("${cache.redis.prefix.contact:contact_cache:}")
+    @Value("${cache.redis.prefix.contact:contact_cache}")
     private String contactCachePrefix;
 
     @CircuitBreaker(name = "redisCache")
     public void cacheContactsByCompanyId(String companyId, List<ContactViewDTO> contacts) {
         try {
-            String key = contactCachePrefix + "company:" + companyId;
+            String key = companyKey(companyId);
             String value = objectMapper.writeValueAsString(contacts);
             redisTemplate.opsForValue().set(key, value, contactTtlSeconds, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class ContactCacheService implements ContactCachePort {
     @Retry(name = "redisCache")
     public List<ContactViewDTO> getContactsByCompanyIdFromCache(String companyId) {
         try {
-            String key = contactCachePrefix + "company:" + companyId;
+            String key = companyKey(companyId);
             String value = redisTemplate.opsForValue().get(key);
             if (value != null) {
                 return objectMapper.readValue(value, objectMapper.getTypeFactory().constructCollectionType(List.class, ContactViewDTO.class));
@@ -57,7 +57,7 @@ public class ContactCacheService implements ContactCachePort {
     @CircuitBreaker(name = "redisCache")
     public void cacheActiveContactsByCompanyId(String companyId, List<ContactViewDTO> contacts) {
         try {
-            String key = contactCachePrefix + "company:" + companyId + ":active";
+            String key = activeCompanyKey(companyId);
             String value = objectMapper.writeValueAsString(contacts);
             redisTemplate.opsForValue().set(key, value, contactTtlSeconds, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -69,7 +69,7 @@ public class ContactCacheService implements ContactCachePort {
     @Retry(name = "redisCache")
     public List<ContactViewDTO> getActiveContactsByCompanyIdFromCache(String companyId) {
         try {
-            String key = contactCachePrefix + "company:" + companyId + ":active";
+            String key = activeCompanyKey(companyId);
             String value = redisTemplate.opsForValue().get(key);
             if (value != null) {
                 return objectMapper.readValue(value, objectMapper.getTypeFactory().constructCollectionType(List.class, ContactViewDTO.class));
@@ -83,8 +83,8 @@ public class ContactCacheService implements ContactCachePort {
     @CircuitBreaker(name = "redisCache")
     public void removeContactsFromCacheByCompanyId(String companyId) {
         try {
-            String key = contactCachePrefix + "company:" + companyId;
-            String activeKey = contactCachePrefix + "company:" + companyId + ":active";
+            String key = companyKey(companyId);
+            String activeKey = activeCompanyKey(companyId);
             redisTemplate.delete(key);
             redisTemplate.delete(activeKey);
         } catch (Exception e) {
@@ -95,6 +95,25 @@ public class ContactCacheService implements ContactCachePort {
     private List<ContactViewDTO> getContactsListFallback(String companyId, Exception ex) {
         log.warn("FALLBACK: Redis indisponivel");
         return null;
+    }
+
+    private String basePrefix() {
+        if (contactCachePrefix == null || contactCachePrefix.isBlank()) {
+            return "contact_cache";
+        }
+        return contactCachePrefix.replaceAll(":+$", "");
+    }
+
+    private String companyKey(String companyId) {
+        return basePrefix() + ":company:" + normalize(companyId);
+    }
+
+    private String activeCompanyKey(String companyId) {
+        return companyKey(companyId) + ":active";
+    }
+
+    private String normalize(String value) {
+        return value == null ? "" : value.trim().toLowerCase();
     }
 }
 

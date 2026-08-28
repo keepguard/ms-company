@@ -25,13 +25,13 @@ public class BankAccountCacheService implements BankAccountCachePort {
     @Value("${cache.redis.ttl.bank-account:2592000}")
     private long bankAccountTtlSeconds;
 
-    @Value("${cache.redis.prefix.bank-account:bank_account_cache:}")
+    @Value("${cache.redis.prefix.bank-account:bank_account_cache}")
     private String bankAccountCachePrefix;
 
     @CircuitBreaker(name = "redisCache")
     public void cacheBankAccountsByCompanyId(String companyId, List<BankAccountViewDTO> bankAccounts) {
         try {
-            String key = bankAccountCachePrefix + "company:" + companyId;
+            String key = companyKey(companyId);
             String value = objectMapper.writeValueAsString(bankAccounts);
             redisTemplate.opsForValue().set(key, value, bankAccountTtlSeconds, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class BankAccountCacheService implements BankAccountCachePort {
     @Retry(name = "redisCache")
     public List<BankAccountViewDTO> getBankAccountsByCompanyIdFromCache(String companyId) {
         try {
-            String key = bankAccountCachePrefix + "company:" + companyId;
+            String key = companyKey(companyId);
             String value = redisTemplate.opsForValue().get(key);
             if (value != null) {
                 return objectMapper.readValue(value, objectMapper.getTypeFactory().constructCollectionType(List.class, BankAccountViewDTO.class));
@@ -57,7 +57,7 @@ public class BankAccountCacheService implements BankAccountCachePort {
     @CircuitBreaker(name = "redisCache")
     public void cacheActiveBankAccountByCompanyId(String companyId, BankAccountViewDTO bankAccount) {
         try {
-            String key = bankAccountCachePrefix + "company:" + companyId + ":active";
+            String key = activeCompanyKey(companyId);
             String value = objectMapper.writeValueAsString(bankAccount);
             redisTemplate.opsForValue().set(key, value, bankAccountTtlSeconds, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -69,7 +69,7 @@ public class BankAccountCacheService implements BankAccountCachePort {
     @Retry(name = "redisCache")
     public BankAccountViewDTO getActiveBankAccountByCompanyIdFromCache(String companyId) {
         try {
-            String key = bankAccountCachePrefix + "company:" + companyId + ":active";
+            String key = activeCompanyKey(companyId);
             String value = redisTemplate.opsForValue().get(key);
             if (value != null) {
                 return objectMapper.readValue(value, BankAccountViewDTO.class);
@@ -83,8 +83,8 @@ public class BankAccountCacheService implements BankAccountCachePort {
     @CircuitBreaker(name = "redisCache")
     public void removeBankAccountsFromCacheByCompanyId(String companyId) {
         try {
-            String key = bankAccountCachePrefix + "company:" + companyId;
-            String activeKey = bankAccountCachePrefix + "company:" + companyId + ":active";
+            String key = companyKey(companyId);
+            String activeKey = activeCompanyKey(companyId);
             redisTemplate.delete(key);
             redisTemplate.delete(activeKey);
         } catch (Exception e) {
@@ -100,6 +100,25 @@ public class BankAccountCacheService implements BankAccountCachePort {
     private BankAccountViewDTO getBankAccountFallback(String companyId, Exception ex) {
         log.warn("FALLBACK: Redis indisponivel");
         return null;
+    }
+
+    private String basePrefix() {
+        if (bankAccountCachePrefix == null || bankAccountCachePrefix.isBlank()) {
+            return "bank_account_cache";
+        }
+        return bankAccountCachePrefix.replaceAll(":+$", "");
+    }
+
+    private String companyKey(String companyId) {
+        return basePrefix() + ":company:" + normalize(companyId);
+    }
+
+    private String activeCompanyKey(String companyId) {
+        return companyKey(companyId) + ":active";
+    }
+
+    private String normalize(String value) {
+        return value == null ? "" : value.trim().toLowerCase();
     }
 }
 
