@@ -184,8 +184,8 @@ cp "${DOCKERFILE_PATH}" "${DOCKERFILE_PATH}.bak"
 sed "s/VERSION_PLACEHOLDER/${VERSION}/g" "${DOCKERFILE_PATH}.bak" > "${DOCKERFILE_PATH}"
 
 # 3. Build Docker Image
-log_step "3/5 Construindo imagem Docker..."
-docker build -t "${IMAGE_TAG}" -t "${IMAGE_LATEST}" .
+log_step "3/5 Construindo imagem Docker (linux/amd64)..."
+docker build --platform linux/amd64 -t "${IMAGE_TAG}" -t "${IMAGE_LATEST}" .
 log_success "Imagem Docker construída com sucesso: ${IMAGE_TAG}"
 
 # 4. Push para GitHub Container Registry
