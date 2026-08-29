@@ -58,3 +58,7 @@ management:
     metrics:
       export:
         enabled: true
+
+keepguard:
+  audit:
+    exchange: srv-audit-exchange-prod

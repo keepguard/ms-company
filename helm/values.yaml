@@ -17,6 +17,8 @@ env:
   serverPort: 8083
   redisHost: "redis"
   redisPort: 6379
+  rabbitmqHost: "rabbitmq-service"
+  rabbitmqPort: "5672"
   userServiceUrl: "http://ms-user:8085"
   authServiceUrl: "http://ms-auth:8081"
   postgresDb: "keepguard_api_db"
