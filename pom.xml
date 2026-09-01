@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.keepguard</groupId>
 	<artifactId>ms-company</artifactId>
-	<version>1.0.14-1.0.0</version>
+	<version>1.0.15-1.0.0</version>
 	<name>ms-company</name>
 	<description>Company Management Service</description>
 	<url/>
