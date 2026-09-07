@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.test.builder;
 
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.representative.dto.request.RepresentativeCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.representative.dto.response.RepresentativeResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.representative.dto.request.RepresentativeUpdateRequestDTO;
 import com.keepguard.ms_company.application.dto.representative.RepresentativeCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.representative.RepresentativeUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.representative.RepresentativeViewDTO;
@@ -203,8 +203,8 @@ public class RepresentativeTestBuilder {
         );
     }
     
-    public RepresentativeCreateDTO buildCreateDTO() {
-        RepresentativeCreateDTO dto = new RepresentativeCreateDTO();
+    public RepresentativeCreateRequestDTO buildCreateDTO() {
+        RepresentativeCreateRequestDTO dto = new RepresentativeCreateRequestDTO();
         dto.setName(name);
         dto.setCpf(cpf);
         dto.setRg(rg);
@@ -215,8 +215,8 @@ public class RepresentativeTestBuilder {
         return dto;
     }
     
-    public RepresentativeUpdateDTO buildUpdateDTO() {
-        RepresentativeUpdateDTO dto = new RepresentativeUpdateDTO();
+    public RepresentativeUpdateRequestDTO buildUpdateDTO() {
+        RepresentativeUpdateRequestDTO dto = new RepresentativeUpdateRequestDTO();
         dto.setName(name);
         dto.setCpf(cpf);
         dto.setRg(rg);
@@ -275,11 +275,11 @@ public class RepresentativeTestBuilder {
         return builder().buildUpdateCommand();
     }
     
-    public static RepresentativeCreateDTO createDefaultCreateDTO() {
+    public static RepresentativeCreateRequestDTO createDefaultCreateDTO() {
         return builder().buildCreateDTO();
     }
     
-    public static RepresentativeUpdateDTO createDefaultUpdateDTO() {
+    public static RepresentativeUpdateRequestDTO createDefaultUpdateDTO() {
         return builder().buildUpdateDTO();
     }
     

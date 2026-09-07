@@ -1,12 +1,14 @@
 package com.keepguard.ms_company.application.port.in;
 
-import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanySimpleResponseDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyCreateCommandDTO;
+import com.keepguard.ms_company.application.dto.company.CompanyMfaChannelCommandDTO;
+import com.keepguard.ms_company.application.dto.company.CompanySimpleViewDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyViewDTO;
 import com.keepguard.ms_company.application.dto.common.PageResultDTO;
 import com.keepguard.ms_company.application.dto.company.CompanySearchCriteriaDTO;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface CompanyPort {
@@ -29,7 +31,7 @@ public interface CompanyPort {
 
     CompanyViewDTO block(UUID id);
 
-    CompanyViewDTO updateMfaChannels(UUID id, java.util.List<com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyMfaChannelRequestDTO> channels);
+    CompanyViewDTO updateMfaChannels(UUID id, List<CompanyMfaChannelCommandDTO> channels);
 
     void delete(UUID id);
 
@@ -43,7 +45,7 @@ public interface CompanyPort {
 
     CompanyViewDTO getByTenantId(UUID tenantId);
 
-    CompanySimpleResponseDTO getSimpleByTenantId(UUID tenantId);
+    CompanySimpleViewDTO getSimpleByTenantId(UUID tenantId);
 
     PageResultDTO<CompanyViewDTO> search(CompanySearchCriteriaDTO criteria);
 }

@@ -1,16 +1,11 @@
 package com.keepguard.ms_company.application.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.cnae.dto.CnaeCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.cnae.dto.CnaeResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.cnae.dto.CnaeUpdateDTO;
 import com.keepguard.ms_company.application.dto.cnae.CnaeCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.cnae.CnaeUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.cnae.CnaeViewDTO;
 import com.keepguard.ms_company.domain.entity.Cnae;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 @Slf4j
@@ -93,105 +88,7 @@ public class CnaeApplicationMapper {
         }
     }
 
-    public CnaeCreateCommandDTO toCreateCommand(CnaeCreateDTO dto, UUID companyId) {
-        if (dto == null) {
-            return null;
-        }
-
-        try {
-            return new CnaeCreateCommandDTO(
-                dto.getCode(),
-                dto.getDescription(),
-                dto.getSection(),
-                dto.getDivision(),
-                dto.getGroupCode(),
-                dto.getClassCode(),
-                dto.getSubclassCode(),
-                dto.isPrincipal(),
-                companyId
-            );
-        } catch (Exception e) {
-            log.error("Erro ao mapear CnaeCreateDTO para CnaeCreateCommandDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    public CnaeUpdateCommandDTO toUpdateCommand(CnaeUpdateDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        try {
-            return new CnaeUpdateCommandDTO(
-                dto.getCode(),
-                dto.getDescription(),
-                dto.getSection(),
-                dto.getDivision(),
-                dto.getGroupCode(),
-                dto.getClassCode(),
-                dto.getSubclassCode()
-            );
-        } catch (Exception e) {
-            log.error("Erro ao mapear CnaeUpdateDTO para CnaeUpdateCommandDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
     public CnaeViewDTO toView(Cnae cnae) {
         return toViewDTO(cnae);
-    }
-
-    public CnaeResponseDTO toResponseDTO(CnaeViewDTO viewDTO) {
-        if (viewDTO == null) {
-            return null;
-        }
-
-        try {
-            return CnaeResponseDTO.builder()
-                .id(viewDTO.id())
-                .companyId(viewDTO.companyId())
-                .code(viewDTO.code())
-                .description(viewDTO.description())
-                .section(viewDTO.section())
-                .division(viewDTO.division())
-                .groupCode(viewDTO.groupCode())
-                .classCode(viewDTO.classCode())
-                .subclassCode(viewDTO.subclassCode())
-                .active(viewDTO.active())
-                .principal(viewDTO.principal())
-                .createdAt(viewDTO.createdAt())
-                .updatedAt(viewDTO.updatedAt())
-                .build();
-        } catch (Exception e) {
-            log.error("Erro ao mapear CnaeViewDTO para CnaeResponseDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    public CnaeResponseDTO toResponseDTO(Cnae cnae) {
-        if (cnae == null) {
-            return null;
-        }
-
-        try {
-            return CnaeResponseDTO.builder()
-                .id(cnae.getId())
-                .companyId(cnae.getCompanyId())
-                .code(cnae.getCode())
-                .description(cnae.getDescription())
-                .section(cnae.getSection())
-                .division(cnae.getDivision())
-                .groupCode(cnae.getGroupCode())
-                .classCode(cnae.getClassCode())
-                .subclassCode(cnae.getSubclassCode())
-                .active(cnae.isActive())
-                .principal(cnae.isPrincipal())
-                .createdAt(cnae.getCreatedAt())
-                .updatedAt(cnae.getUpdatedAt())
-                .build();
-        } catch (Exception e) {
-            log.error("Erro ao mapear Cnae para CnaeResponseDTO: {}", e.getMessage(), e);
-            throw e;
-        }
     }
 }

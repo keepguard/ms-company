@@ -7,7 +7,7 @@ import com.keepguard.ms_company.application.mapper.AddressApplicationMapper;
 import com.keepguard.ms_company.application.port.out.persistence.AddressRepositoryPort;
 import com.keepguard.ms_company.application.port.out.persistence.CompanyRepositoryPort;
 import com.keepguard.ms_company.application.service.exception.NotFoundException;
-import com.keepguard.ms_company.application.service.exception.InvalidStatusForOperationException;
+import com.keepguard.ms_company.domain.exception.InvalidStatusForOperationException;
 import com.keepguard.ms_company.domain.entity.Address;
 import com.keepguard.ms_company.domain.entity.Company;
 import com.keepguard.ms_company.application.port.out.metrics.MetricsPort;

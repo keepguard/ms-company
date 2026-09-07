@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.adapters.in.rest.address.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.request.AddressCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.response.AddressResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.request.AddressUpdateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.AddressDTO;
 import com.keepguard.ms_company.application.dto.address.AddressCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.address.AddressUpdateCommandDTO;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class AddressAdapterMapper {
 
-    public AddressCreateCommandDTO toCreateCommand(AddressCreateDTO dto) {
+    public AddressCreateCommandDTO toCreateCommand(AddressCreateRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -31,12 +31,12 @@ public class AddressAdapterMapper {
                 dto.getZipCode()
             );
         } catch (Exception e) {
-            log.error("Erro ao mapear AddressCreateDTO para AddressCreateCommandDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear AddressCreateRequestDTO para AddressCreateCommandDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public AddressUpdateCommandDTO toUpdateCommand(AddressUpdateDTO dto) {
+    public AddressUpdateCommandDTO toUpdateCommand(AddressUpdateRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -53,7 +53,7 @@ public class AddressAdapterMapper {
                 dto.getZipCode()
             );
         } catch (Exception e) {
-            log.error("Erro ao mapear AddressUpdateDTO para AddressUpdateCommandDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear AddressUpdateRequestDTO para AddressUpdateCommandDTO: {}", e.getMessage(), e);
             throw e;
         }
     }

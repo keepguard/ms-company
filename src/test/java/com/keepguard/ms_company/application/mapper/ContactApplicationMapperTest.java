@@ -1,8 +1,5 @@
 package com.keepguard.ms_company.application.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactUpdateDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactViewDTO;
@@ -116,89 +113,9 @@ class ContactApplicationMapperTest {
         assertTrue(view.active());
     }
     
-    @Test
-    @DisplayName("Deve converter ContactCreateDTO para ContactCreateCommandDTO")
-    void shouldConvertContactCreateDTOToContactCreateCommandDTO() {
-        // Given
-        ContactCreateDTO dto = ContactCreateDTO.builder()
-            .name("João Silva")
-            .email("joao.silva@empresa.com")
-            .phone("(11) 99999-9999")
-            .position("Gerente")
-            .department("Vendas")
-            .build();
-        
-        // When
-        ContactCreateCommandDTO command = contactMapper.toCreateCommand(dto);
-        
-        // Then
-        assertNotNull(command);
-        assertEquals("João Silva", command.name());
-        assertEquals("joao.silva@empresa.com", command.email());
-        assertEquals("(11) 99999-9999", command.phone());
-        assertEquals("Gerente", command.position());
-        assertEquals("Vendas", command.department());
-    }
     
-    @Test
-    @DisplayName("Deve converter ContactUpdateDTO para ContactUpdateCommandDTO")
-    void shouldConvertContactUpdateDTOToContactUpdateCommandDTO() {
-        // Given
-        ContactUpdateDTO dto = ContactUpdateDTO.builder()
-            .name("João Silva Atualizado")
-            .email("joao.silva.novo@empresa.com")
-            .phone("(11) 88888-8888")
-            .position("Supervisor")
-            .department("Marketing")
-            .build();
-        
-        // When
-        ContactUpdateCommandDTO command = contactMapper.toUpdateCommand(dto);
-        
-        // Then
-        assertNotNull(command);
-        assertEquals("João Silva Atualizado", command.name());
-        assertEquals("joao.silva.novo@empresa.com", command.email());
-        assertEquals("(11) 88888-8888", command.phone());
-        assertEquals("Supervisor", command.position());
-        assertEquals("Marketing", command.department());
-    }
     
-    @Test
-    @DisplayName("Deve converter ContactViewDTO para ContactResponseDTO")
-    void shouldConvertContactViewDTOToContactResponseDTO() {
-        // Given
-        ContactViewDTO view = new ContactViewDTO(
-            contactId, companyId, "João Silva", "joao.silva@empresa.com", 
-            "(11) 99999-9999", "https://www.empresa.com", "Gerente", "Vendas", true
-        );
-        
-        // When
-        ContactResponseDTO response = contactMapper.toResponseDTO(view);
-        
-        // Then
-        assertNotNull(response);
-        assertEquals(contactId, response.getId());
-        assertEquals(companyId, response.getCompanyId());
-        assertEquals("João Silva", response.getName());
-        assertEquals("joao.silva@empresa.com", response.getEmail());
-        assertEquals("(11) 99999-9999", response.getPhone());
-        assertEquals("Gerente", response.getPosition());
-        assertEquals("Vendas", response.getDepartment());
-        assertTrue(response.isActive());
-    }
     
-    @Test
-    @DisplayName("Deve retornar null quando entrada é null")
-    void shouldReturnNullWhenInputIsNull() {
-        // When & Then
-        assertNull(contactMapper.toDomain((ContactCreateCommandDTO) null));
-        assertNull(contactMapper.toDomain(null, null));
-        assertNull(contactMapper.toViewDTO(null, companyId));
-        assertNull(contactMapper.toCreateCommand(null));
-        assertNull(contactMapper.toUpdateCommand(null));
-        assertNull(contactMapper.toResponseDTO(null));
-    }
     
     @Test
     @DisplayName("Deve preservar campos nulos em ContactUpdateCommandDTO")

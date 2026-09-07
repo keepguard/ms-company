@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.adapters.in.rest.representative.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.representative.dto.request.RepresentativeCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.representative.dto.response.RepresentativeResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.representative.dto.request.RepresentativeUpdateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.RepresentativeDTO;
 import com.keepguard.ms_company.application.dto.representative.RepresentativeCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.representative.RepresentativeUpdateCommandDTO;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @Slf4j
 public class RepresentativeAdapterMapper {
 
-    public RepresentativeCreateCommandDTO toCreateCommand(RepresentativeCreateDTO dto, UUID companyId) {
+    public RepresentativeCreateCommandDTO toCreateCommand(RepresentativeCreateRequestDTO dto, UUID companyId) {
         if (dto == null) {
             return null;
         }
@@ -33,12 +33,12 @@ public class RepresentativeAdapterMapper {
                 companyId
             );
         } catch (Exception e) {
-            log.error("Erro ao mapear RepresentativeCreateDTO para RepresentativeCreateCommandDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear RepresentativeCreateRequestDTO para RepresentativeCreateCommandDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public RepresentativeUpdateCommandDTO toUpdateCommand(RepresentativeUpdateDTO dto) {
+    public RepresentativeUpdateCommandDTO toUpdateCommand(RepresentativeUpdateRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -54,7 +54,7 @@ public class RepresentativeAdapterMapper {
                 dto.getRole()
             );
         } catch (Exception e) {
-            log.error("Erro ao mapear RepresentativeUpdateDTO para RepresentativeUpdateCommandDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear RepresentativeUpdateRequestDTO para RepresentativeUpdateCommandDTO: {}", e.getMessage(), e);
             throw e;
         }
     }

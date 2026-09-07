@@ -1,9 +1,9 @@
 package com.keepguard.ms_company.adapters.in.rest.company;
 
 import com.keepguard.lib_common.metrics.annotation.MetricsEndpoint;
-import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyCreateDTO;
+import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyCreateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanyResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyUpdateRequestDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyViewDTO;
@@ -45,7 +45,7 @@ public class CompanyController {
         @ApiResponse(responseCode = "400", description = "Dados inválidos"),
         @ApiResponse(responseCode = "409", description = "CNPJ já cadastrado")
     })
-    public ResponseEntity<CompanyResponseDTO> create(@Valid @RequestBody CompanyCreateDTO dto) {
+    public ResponseEntity<CompanyResponseDTO> create(@Valid @RequestBody CompanyCreateRequestDTO dto) {
         log.info("Criando empresa: {}", dto.getName());
         CompanyCreateCommandDTO command = companyAdapterMapper.toCreateCommand(dto);
         CompanyViewDTO view = companyPort.create(command);
@@ -63,7 +63,7 @@ public class CompanyController {
     })
     public ResponseEntity<CompanyResponseDTO> update(
             @Parameter(description = "ID da empresa") @PathVariable UUID id,
-            @Valid @RequestBody CompanyUpdateDTO dto) {
+            @Valid @RequestBody CompanyUpdateRequestDTO dto) {
         log.info("Atualizando empresa ID: {}", id);
         CompanyUpdateCommandDTO command = companyAdapterMapper.toUpdateCommand(dto);
         CompanyViewDTO view = companyPort.update(id, command);
@@ -268,7 +268,7 @@ public class CompanyController {
             @Parameter(description = "ID da empresa") @PathVariable UUID id,
             @Valid @RequestBody java.util.List<com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyMfaChannelRequestDTO> channels) {
         log.info("Atualizando canais de MFA da empresa ID: {}", id);
-        CompanyViewDTO view = companyPort.updateMfaChannels(id, channels);
+        CompanyViewDTO view = companyPort.updateMfaChannels(id, companyAdapterMapper.toMfaChannelCommands(channels));
         CompanyResponseDTO response = companyAdapterMapper.toResponseDTO(view);
         return ResponseEntity.ok(response);
     }

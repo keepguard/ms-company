@@ -1,7 +1,7 @@
 package com.keepguard.ms_company.application.port.out.cache;
 
+import com.keepguard.ms_company.application.dto.company.CompanySimpleViewDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyViewDTO;
-import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanySimpleResponseDTO;
 
 public interface CompanyCachePort {
 
@@ -21,12 +21,12 @@ public interface CompanyCachePort {
     CompanyViewDTO getCompanyByTenantIdFromCache(String tenantId);
     void removeCompanyFromCacheByTenantId(String tenantId);
 
-    void cacheSimpleCompanyById(String companyId, CompanySimpleResponseDTO company);
-    CompanySimpleResponseDTO getSimpleCompanyByIdFromCache(String companyId);
+    void cacheSimpleCompanyById(String companyId, CompanySimpleViewDTO company);
+    CompanySimpleViewDTO getSimpleCompanyByIdFromCache(String companyId);
     void removeSimpleCompanyFromCacheById(String companyId);
 
-    void cacheSimpleCompanyByTenantId(String tenantId, CompanySimpleResponseDTO company);
-    CompanySimpleResponseDTO getSimpleCompanyByTenantIdFromCache(String tenantId);
+    void cacheSimpleCompanyByTenantId(String tenantId, CompanySimpleViewDTO company);
+    CompanySimpleViewDTO getSimpleCompanyByTenantIdFromCache(String tenantId);
     void removeSimpleCompanyFromCacheByTenantId(String tenantId);
 
     void clearAllCompanyCache(String companyId, String cnpj, String codeCompany, String tenantId);

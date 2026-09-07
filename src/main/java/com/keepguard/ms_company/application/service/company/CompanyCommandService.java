@@ -258,7 +258,7 @@ public class CompanyCommandService {
         auditAction = "UPDATE",
         auditEntityType = "COMPANY"
     )
-    public CompanyViewDTO updateMfaChannels(UUID id, java.util.List<com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyMfaChannelRequestDTO> channels) {
+    public CompanyViewDTO updateMfaChannels(UUID id, java.util.List<com.keepguard.ms_company.application.dto.company.CompanyMfaChannelCommandDTO> channels) {
         Company company = companyRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Empresa não encontrada: " + id));
 

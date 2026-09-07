@@ -1,9 +1,9 @@
 package com.keepguard.ms_company.adapters.in.rest.bankaccount;
 
 import com.keepguard.lib_common.metrics.annotation.MetricsEndpoint;
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.request.BankAccountCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.response.BankAccountResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.request.BankAccountUpdateRequestDTO;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountViewDTO;
@@ -46,7 +46,7 @@ public class BankAccountController {
     })
     public ResponseEntity<BankAccountResponseDTO> create(
             @Parameter(description = "ID da empresa") @PathVariable UUID companyId,
-            @Valid @RequestBody BankAccountCreateDTO dto) {
+            @Valid @RequestBody BankAccountCreateRequestDTO dto) {
         log.info("Criando dados bancários para empresa: {}", companyId);
         BankAccountCreateCommandDTO command = bankAccountAdapterMapper.toCreateCommand(dto);
         BankAccountViewDTO view = bankAccountPort.create(companyId, command);
@@ -64,7 +64,7 @@ public class BankAccountController {
     })
     public ResponseEntity<BankAccountResponseDTO> update(
             @Parameter(description = "ID dos dados bancários") @PathVariable UUID id,
-            @Valid @RequestBody BankAccountUpdateDTO dto) {
+            @Valid @RequestBody BankAccountUpdateRequestDTO dto) {
         log.info("Atualizando dados bancários ID: {}", id);
 
         BankAccountUpdateCommandDTO command = bankAccountAdapterMapper.toUpdateCommand(dto);

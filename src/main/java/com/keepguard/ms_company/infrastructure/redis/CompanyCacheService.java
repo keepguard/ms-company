@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.infrastructure.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.keepguard.ms_company.application.dto.company.CompanySimpleViewDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyViewDTO;
-import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanySimpleResponseDTO;
 import com.keepguard.ms_company.application.port.out.cache.CompanyCachePort;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -176,7 +176,7 @@ public class CompanyCacheService implements CompanyCachePort {
     }
 
     @CircuitBreaker(name = "redisCache")
-    public void cacheSimpleCompanyById(String companyId, CompanySimpleResponseDTO company) {
+    public void cacheSimpleCompanyById(String companyId, CompanySimpleViewDTO company) {
         try {
             String key = simpleIdKey(companyId);
             String value = objectMapper.writeValueAsString(company);
@@ -188,12 +188,12 @@ public class CompanyCacheService implements CompanyCachePort {
 
     @CircuitBreaker(name = "redisCache", fallbackMethod = "getSimpleCompanyFallback")
     @Retry(name = "redisCache")
-    public CompanySimpleResponseDTO getSimpleCompanyByIdFromCache(String companyId) {
+    public CompanySimpleViewDTO getSimpleCompanyByIdFromCache(String companyId) {
         try {
             String key = simpleIdKey(companyId);
             String value = redisTemplate.opsForValue().get(key);
             if (value != null) {
-                return objectMapper.readValue(value, CompanySimpleResponseDTO.class);
+                return objectMapper.readValue(value, CompanySimpleViewDTO.class);
             }
             return null;
         } catch (Exception e) {
@@ -212,7 +212,7 @@ public class CompanyCacheService implements CompanyCachePort {
     }
 
     @CircuitBreaker(name = "redisCache")
-    public void cacheSimpleCompanyByTenantId(String tenantId, CompanySimpleResponseDTO company) {
+    public void cacheSimpleCompanyByTenantId(String tenantId, CompanySimpleViewDTO company) {
         try {
             String key = simpleTenantKey(tenantId);
             String value = objectMapper.writeValueAsString(company);
@@ -224,11 +224,11 @@ public class CompanyCacheService implements CompanyCachePort {
 
     @CircuitBreaker(name = "redisCache", fallbackMethod = "getSimpleCompanyFallback")
     @Retry(name = "redisCache")
-    public CompanySimpleResponseDTO getSimpleCompanyByTenantIdFromCache(String tenantId) {
+    public CompanySimpleViewDTO getSimpleCompanyByTenantIdFromCache(String tenantId) {
         try {
             String value = redisTemplate.opsForValue().get(simpleTenantKey(tenantId));
             if (value != null) {
-                return objectMapper.readValue(value, CompanySimpleResponseDTO.class);
+                return objectMapper.readValue(value, CompanySimpleViewDTO.class);
             }
             return null;
         } catch (Exception e) {
@@ -331,7 +331,7 @@ public class CompanyCacheService implements CompanyCachePort {
         return null;
     }
 
-    private CompanySimpleResponseDTO getSimpleCompanyFallback(String param, Exception ex) {
+    private CompanySimpleViewDTO getSimpleCompanyFallback(String param, Exception ex) {
         log.warn("FALLBACK: Redis indisponivel");
         return null;
     }

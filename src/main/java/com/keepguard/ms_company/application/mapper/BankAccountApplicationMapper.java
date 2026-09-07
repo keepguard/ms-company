@@ -1,8 +1,5 @@
 package com.keepguard.ms_company.application.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountUpdateDTO;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountViewDTO;
@@ -101,69 +98,6 @@ public class BankAccountApplicationMapper {
             );
         } catch (Exception e) {
             log.error("Erro ao mapear BankAccount para BankAccountViewDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    public BankAccountCreateCommandDTO toCreateCommand(BankAccountCreateDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        try {
-            return new BankAccountCreateCommandDTO(
-                dto.getCode(),
-                dto.getAgency(),
-                dto.getAgencyDigit(),
-                dto.getAccountNumber(),
-                dto.getAccountDigit(),
-                dto.getAccountType()
-            );
-        } catch (Exception e) {
-            log.error("Erro ao mapear BankAccountCreateDTO para BankAccountCreateCommandDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    public BankAccountUpdateCommandDTO toUpdateCommand(BankAccountUpdateDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        try {
-            return new BankAccountUpdateCommandDTO(
-                dto.getCode(),
-                dto.getAgency(),
-                dto.getAgencyDigit(),
-                dto.getAccountNumber(),
-                dto.getAccountDigit(),
-                dto.getAccountType()
-            );
-        } catch (Exception e) {
-            log.error("Erro ao mapear BankAccountUpdateDTO para BankAccountUpdateCommandDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    public BankAccountResponseDTO toResponseDTO(BankAccountViewDTO viewDTO) {
-        if (viewDTO == null) {
-            return null;
-        }
-
-        try {
-            return BankAccountResponseDTO.builder()
-                .id(viewDTO.id())
-                .companyId(viewDTO.companyId())
-                .code(viewDTO.code())
-                .agency(viewDTO.agency())
-                .agencyDigit(viewDTO.agencyDigit())
-                .accountNumber(viewDTO.accountNumber())
-                .accountDigit(viewDTO.accountDigit())
-                .accountType(viewDTO.accountType())
-                .active(viewDTO.active())
-                .build();
-        } catch (Exception e) {
-            log.error("Erro ao mapear BankAccountViewDTO para BankAccountResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }

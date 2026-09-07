@@ -1,6 +1,6 @@
 package com.keepguard.ms_company.application.service.company;
 
-import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanySimpleResponseDTO;
+import com.keepguard.ms_company.application.dto.company.CompanySimpleViewDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyViewDTO;
 import com.keepguard.ms_company.application.dto.company.CompanySearchCriteriaDTO;
 import com.keepguard.ms_company.application.dto.common.PageResultDTO;
@@ -219,10 +219,10 @@ public class CompanyQueryService {
         }
     }
 
-    public CompanySimpleResponseDTO getSimpleByTenantId(UUID tenantId) {
+    public CompanySimpleViewDTO getSimpleByTenantId(UUID tenantId) {
         try {
             // Tentar buscar no cache primeiro
-            CompanySimpleResponseDTO cachedCompany = companyCachePort.getSimpleCompanyByTenantIdFromCache(tenantId.toString());
+            CompanySimpleViewDTO cachedCompany = companyCachePort.getSimpleCompanyByTenantIdFromCache(tenantId.toString());
             if (cachedCompany != null) {
                 metricsPort.incrementCounter("company_queries_total",
                     Map.of("query_type", "GET_SIMPLE_BY_TENANT_ID", "status", "CACHE_HIT"));
@@ -245,15 +245,15 @@ public class CompanyQueryService {
             }
 
             CompanyViewDTO companyView = companyMapper.toViewDTO(company);
-            CompanySimpleResponseDTO simpleResponse = companyMapper.toSimpleResponseDTO(companyView);
+            CompanySimpleViewDTO simpleView = companyMapper.toSimpleViewDTO(companyView);
 
             // Cachear o resultado
-            companyCachePort.cacheSimpleCompanyByTenantId(tenantId.toString(), simpleResponse);
+            companyCachePort.cacheSimpleCompanyByTenantId(tenantId.toString(), simpleView);
 
             metricsPort.incrementCounter("company_queries_total",
                 Map.of("query_type", "GET_SIMPLE_BY_TENANT_ID", "status", "SUCCESS"));
 
-            return simpleResponse;
+            return simpleView;
 
         } catch (NotFoundException e) {
             // Re-throw exceções de negócio sem wrapping

@@ -1,8 +1,5 @@
 package com.keepguard.ms_company.application.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressUpdateDTO;
 import com.keepguard.ms_company.application.dto.address.AddressCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.address.AddressUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.address.AddressViewDTO;
@@ -109,75 +106,6 @@ public class AddressApplicationMapper {
             );
         } catch (Exception e) {
             log.error("Erro ao mapear Address para AddressViewDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    public AddressCreateCommandDTO toCreateCommand(AddressCreateDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        try {
-            return new AddressCreateCommandDTO(
-                dto.getStreet(),
-                dto.getNumber(),
-                dto.getComplement(),
-                dto.getDistrict(),
-                dto.getCity(),
-                dto.getState(),
-                dto.getCountry(),
-                dto.getZipCode()
-            );
-        } catch (Exception e) {
-            log.error("Erro ao mapear AddressCreateDTO para AddressCreateCommandDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    public AddressUpdateCommandDTO toUpdateCommand(AddressUpdateDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        try {
-            return new AddressUpdateCommandDTO(
-                dto.getStreet(),
-                dto.getNumber(),
-                dto.getComplement(),
-                dto.getDistrict(),
-                dto.getCity(),
-                dto.getState(),
-                dto.getCountry(),
-                dto.getZipCode()
-            );
-        } catch (Exception e) {
-            log.error("Erro ao mapear AddressUpdateDTO para AddressUpdateCommandDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    public AddressResponseDTO toResponseDTO(AddressViewDTO viewDTO) {
-        if (viewDTO == null) {
-            return null;
-        }
-
-        try {
-            return AddressResponseDTO.builder()
-                .id(viewDTO.id())
-                .companyId(viewDTO.companyId())
-                .street(viewDTO.street())
-                .number(viewDTO.number())
-                .complement(viewDTO.complement())
-                .district(viewDTO.district())
-                .city(viewDTO.city())
-                .state(viewDTO.state())
-                .country(viewDTO.country())
-                .zipCode(viewDTO.zipCode())
-                .active(viewDTO.active())
-                .build();
-        } catch (Exception e) {
-            log.error("Erro ao mapear AddressViewDTO para AddressResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }

@@ -5,12 +5,13 @@ import com.keepguard.ms_company.adapters.in.rest.bankaccount.mapper.BankAccountA
 import com.keepguard.ms_company.adapters.in.rest.cnae.mapper.CnaeAdapterMapper;
 import com.keepguard.ms_company.adapters.in.rest.contact.mapper.ContactAdapterMapper;
 import com.keepguard.ms_company.adapters.in.rest.representative.mapper.RepresentativeAdapterMapper;
-import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyUpdateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanyResponseDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanySimpleResponseDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyUpdateCommandDTO;
+import com.keepguard.ms_company.application.dto.company.CompanySimpleViewDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyViewDTO;
 import com.keepguard.ms_company.test.builder.CompanyTestBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,10 +60,10 @@ class CompanyAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve mapear CompanyCreateDTO para CompanyCreateCommandDTO com sucesso")
+    @DisplayName("Deve mapear CompanyCreateRequestDTO para CompanyCreateCommandDTO com sucesso")
     void shouldMapCompanyCreateDTOToCompanyCreateCommandDTOSuccessfully() {
         // Given
-        CompanyCreateDTO dto = CompanyTestBuilder.builder()
+        CompanyCreateRequestDTO dto = CompanyTestBuilder.builder()
             .withTechCompany()
             .buildCreateDTO();
         
@@ -81,7 +82,7 @@ class CompanyAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve retornar null quando CompanyCreateDTO for null")
+    @DisplayName("Deve retornar null quando CompanyCreateRequestDTO for null")
     void shouldReturnNullWhenCompanyCreateDTOIsNull() {
         // When
         CompanyCreateCommandDTO result = companyAdapterMapper.toCreateCommand(null);
@@ -91,10 +92,10 @@ class CompanyAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve mapear CompanyUpdateDTO para CompanyUpdateCommandDTO com sucesso")
+    @DisplayName("Deve mapear CompanyUpdateRequestDTO para CompanyUpdateCommandDTO com sucesso")
     void shouldMapCompanyUpdateDTOToCompanyUpdateCommandDTOSuccessfully() {
         // Given
-        CompanyUpdateDTO dto = CompanyTestBuilder.builder()
+        CompanyUpdateRequestDTO dto = CompanyTestBuilder.builder()
             .withRetailCompany()
             .buildUpdateDTO();
         
@@ -112,7 +113,7 @@ class CompanyAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve retornar null quando CompanyUpdateDTO for null")
+    @DisplayName("Deve retornar null quando CompanyUpdateRequestDTO for null")
     void shouldReturnNullWhenCompanyUpdateDTOIsNull() {
         // When
         CompanyUpdateCommandDTO result = companyAdapterMapper.toUpdateCommand(null);
@@ -158,12 +159,12 @@ class CompanyAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve mapear CompanyViewDTO para CompanySimpleResponseDTO com sucesso")
+    @DisplayName("Deve mapear CompanySimpleViewDTO para CompanySimpleResponseDTO com sucesso")
     void shouldMapCompanyViewDTOToCompanySimpleResponseDTOSuccessfully() {
         // Given
-        CompanyViewDTO view = CompanyTestBuilder.builder()
+        CompanySimpleViewDTO view = CompanyTestBuilder.builder()
             .withTechCompany()
-            .buildView();
+            .buildSimpleViewDTO();
         
         // When
         CompanySimpleResponseDTO result = companyAdapterMapper.toSimpleResponseDTO(view);
@@ -184,7 +185,7 @@ class CompanyAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve retornar null quando CompanyViewDTO for null no toSimpleResponseDTO")
+    @DisplayName("Deve retornar null quando CompanySimpleViewDTO for null no toSimpleResponseDTO")
     void shouldReturnNullWhenCompanyViewDTOIsNullInToSimpleResponseDTO() {
         // When
         CompanySimpleResponseDTO result = companyAdapterMapper.toSimpleResponseDTO(null);

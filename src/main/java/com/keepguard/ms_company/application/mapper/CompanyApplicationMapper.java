@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.application.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanySimpleResponseDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyMfaChannelViewDTO;
+import com.keepguard.ms_company.application.dto.company.CompanySimpleViewDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyViewDTO;
 import com.keepguard.ms_company.domain.entity.Company;
@@ -101,29 +101,29 @@ public class CompanyApplicationMapper {
         }
     }
 
-    public CompanySimpleResponseDTO toSimpleResponseDTO(CompanyViewDTO viewDTO) {
+    public CompanySimpleViewDTO toSimpleViewDTO(CompanyViewDTO viewDTO) {
         if (viewDTO == null) {
             return null;
         }
 
         try {
-            return CompanySimpleResponseDTO.builder()
-                .id(viewDTO.id())
-                .codeCompany(viewDTO.codeCompany())
-                .tenantId(viewDTO.tenantId())
-                .name(viewDTO.name())
-                .legalName(viewDTO.legalName())
-                .cnpj(viewDTO.cnpj())
-                .stateRegistration(viewDTO.stateRegistration())
-                .municipalRegistration(viewDTO.municipalRegistration())
-                .taxRegime(viewDTO.taxRegime())
-                .ein(viewDTO.ein())
-                .status(viewDTO.status())
-                .createdAt(viewDTO.createdAt())
-                .updatedAt(viewDTO.updatedAt())
-                .build();
+            return new CompanySimpleViewDTO(
+                viewDTO.id(),
+                viewDTO.codeCompany(),
+                viewDTO.tenantId(),
+                viewDTO.name(),
+                viewDTO.legalName(),
+                viewDTO.cnpj(),
+                viewDTO.stateRegistration(),
+                viewDTO.municipalRegistration(),
+                viewDTO.taxRegime(),
+                viewDTO.ein(),
+                viewDTO.status(),
+                viewDTO.createdAt(),
+                viewDTO.updatedAt()
+            );
         } catch (Exception e) {
-            log.error("Erro ao mapear CompanyViewDTO para CompanySimpleResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear CompanyViewDTO para CompanySimpleViewDTO: {}", e.getMessage(), e);
             throw e;
         }
     }

@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.adapters.in.rest.contact.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.request.ContactCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.response.ContactResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.request.ContactUpdateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.ContactDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactUpdateCommandDTO;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ContactAdapterMapper {
 
-    public ContactCreateCommandDTO toCreateCommand(ContactCreateDTO dto) {
+    public ContactCreateCommandDTO toCreateCommand(ContactCreateRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -29,12 +29,12 @@ public class ContactAdapterMapper {
                 dto.getDepartment()
             );
         } catch (Exception e) {
-            log.error("Erro ao mapear ContactCreateDTO para ContactCreateCommandDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear ContactCreateRequestDTO para ContactCreateCommandDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public ContactUpdateCommandDTO toUpdateCommand(ContactUpdateDTO dto) {
+    public ContactUpdateCommandDTO toUpdateCommand(ContactUpdateRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -49,7 +49,7 @@ public class ContactAdapterMapper {
                 dto.getDepartment()
             );
         } catch (Exception e) {
-            log.error("Erro ao mapear ContactUpdateDTO para ContactUpdateCommandDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear ContactUpdateRequestDTO para ContactUpdateCommandDTO: {}", e.getMessage(), e);
             throw e;
         }
     }

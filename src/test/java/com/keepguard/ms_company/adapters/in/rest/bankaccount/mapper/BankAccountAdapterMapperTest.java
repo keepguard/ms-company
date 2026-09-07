@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.adapters.in.rest.bankaccount.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.request.BankAccountCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.response.BankAccountResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.request.BankAccountUpdateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.BankAccountDTO;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountUpdateCommandDTO;
@@ -37,10 +37,10 @@ class BankAccountAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve mapear BankAccountCreateDTO para BankAccountCreateCommandDTO com sucesso")
+    @DisplayName("Deve mapear BankAccountCreateRequestDTO para BankAccountCreateCommandDTO com sucesso")
     void shouldMapBankAccountCreateDTOToBankAccountCreateCommandDTOSuccessfully() {
         // Given
-        BankAccountCreateDTO dto = BankAccountTestBuilder.builder()
+        BankAccountCreateRequestDTO dto = BankAccountTestBuilder.builder()
             .buildCreateDTO();
         
         // When
@@ -57,7 +57,7 @@ class BankAccountAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve retornar null quando BankAccountCreateDTO for null")
+    @DisplayName("Deve retornar null quando BankAccountCreateRequestDTO for null")
     void shouldReturnNullWhenBankAccountCreateDTOIsNull() {
         // When
         BankAccountCreateCommandDTO result = bankAccountAdapterMapper.toCreateCommand(null);
@@ -67,10 +67,10 @@ class BankAccountAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve mapear BankAccountUpdateDTO para BankAccountUpdateCommandDTO com sucesso")
+    @DisplayName("Deve mapear BankAccountUpdateRequestDTO para BankAccountUpdateCommandDTO com sucesso")
     void shouldMapBankAccountUpdateDTOToBankAccountUpdateCommandDTOSuccessfully() {
         // Given
-        BankAccountUpdateDTO dto = BankAccountTestBuilder.builder()
+        BankAccountUpdateRequestDTO dto = BankAccountTestBuilder.builder()
             .withPoupancaType()
             .buildUpdateDTO();
         
@@ -88,7 +88,7 @@ class BankAccountAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve retornar null quando BankAccountUpdateDTO for null")
+    @DisplayName("Deve retornar null quando BankAccountUpdateRequestDTO for null")
     void shouldReturnNullWhenBankAccountUpdateDTOIsNull() {
         // When
         BankAccountUpdateCommandDTO result = bankAccountAdapterMapper.toUpdateCommand(null);

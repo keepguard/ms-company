@@ -1,16 +1,11 @@
 package com.keepguard.ms_company.application.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeUpdateDTO;
 import com.keepguard.ms_company.application.dto.representative.RepresentativeCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.representative.RepresentativeUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.representative.RepresentativeViewDTO;
 import com.keepguard.ms_company.domain.entity.Representative;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 @Slf4j
@@ -85,100 +80,7 @@ public class RepresentativeApplicationMapper {
         }
     }
 
-    public RepresentativeCreateCommandDTO toCreateCommand(RepresentativeCreateDTO dto, UUID companyId) {
-        if (dto == null) {
-            return null;
-        }
-
-        try {
-            return new RepresentativeCreateCommandDTO(
-                dto.getName(),
-                dto.getCpf(),
-                dto.getRg(),
-                dto.getBirthDate(),
-                dto.getEmail(),
-                dto.getPhone(),
-                dto.getRole(),
-                companyId
-            );
-        } catch (Exception e) {
-            log.error("Erro ao mapear RepresentativeCreateDTO para RepresentativeCreateCommandDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    public RepresentativeUpdateCommandDTO toUpdateCommand(RepresentativeUpdateDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        try {
-            return new RepresentativeUpdateCommandDTO(
-                dto.getName(),
-                dto.getCpf(),
-                dto.getRg(),
-                dto.getBirthDate(),
-                dto.getEmail(),
-                dto.getPhone(),
-                dto.getRole()
-            );
-        } catch (Exception e) {
-            log.error("Erro ao mapear RepresentativeUpdateDTO para RepresentativeUpdateCommandDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
     public RepresentativeViewDTO toView(Representative representative) {
         return toViewDTO(representative);
-    }
-
-    public RepresentativeResponseDTO toResponseDTO(RepresentativeViewDTO viewDTO) {
-        if (viewDTO == null) {
-            return null;
-        }
-
-        try {
-            return RepresentativeResponseDTO.builder()
-                .id(viewDTO.id())
-                .name(viewDTO.name())
-                .cpf(viewDTO.cpf())
-                .rg(viewDTO.rg())
-                .birthDate(viewDTO.birthDate())
-                .email(viewDTO.email())
-                .phone(viewDTO.phone())
-                .role(viewDTO.role())
-                .active(viewDTO.active())
-                .createdAt(viewDTO.createdAt())
-                .updatedAt(viewDTO.updatedAt())
-                .build();
-        } catch (Exception e) {
-            log.error("Erro ao mapear RepresentativeViewDTO para RepresentativeResponseDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    public RepresentativeResponseDTO toResponseDTO(Representative representative) {
-        if (representative == null) {
-            return null;
-        }
-
-        try {
-            return RepresentativeResponseDTO.builder()
-                .id(representative.getId())
-                .name(representative.getName())
-                .cpf(representative.getCpf())
-                .rg(representative.getRg())
-                .birthDate(representative.getBirthDate())
-                .email(representative.getEmail())
-                .phone(representative.getPhone())
-                .role(representative.getRole())
-                .active(representative.isActive())
-                .createdAt(null) // não disponível na entidade de domínio
-                .updatedAt(null) // não disponível na entidade de domínio
-                .build();
-        } catch (Exception e) {
-            log.error("Erro ao mapear Representative para RepresentativeResponseDTO: {}", e.getMessage(), e);
-            throw e;
-        }
     }
 }

@@ -1,8 +1,5 @@
 package com.keepguard.ms_company.application.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountUpdateDTO;
 import com.keepguard.ms_company.application.mapper.BankAccountApplicationMapper;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountUpdateCommandDTO;
@@ -171,99 +168,9 @@ class BankAccountApplicationMapperTest {
         assertTrue(view.active());
     }
     
-    @Test
-    @DisplayName("Deve converter BankAccountCreateDTO para BankAccountCreateCommandDTO")
-    void shouldConvertCreateDTOToCreateCommand() {
-        // Given
-        BankAccountCreateDTO dto = new BankAccountCreateDTO();
-        dto.setCode("001");
-        dto.setAgency("1234");
-        dto.setAgencyDigit("5");
-        dto.setAccountNumber("12345678");
-        dto.setAccountDigit("9");
-        dto.setAccountType(AccountTypeEnum.CORRENTE);
-        
-        // When
-        BankAccountCreateCommandDTO command = bankAccountMapper.toCreateCommand(dto);
-        
-        // Then
-        assertNotNull(command);
-        assertEquals("001", command.code());
-        assertEquals("1234", command.agency());
-        assertEquals("5", command.agencyDigit());
-        assertEquals("12345678", command.accountNumber());
-        assertEquals("9", command.accountDigit());
-        assertEquals(AccountTypeEnum.CORRENTE, command.accountType());
-    }
     
-    @Test
-    @DisplayName("Deve converter BankAccountUpdateDTO para BankAccountUpdateCommandDTO")
-    void shouldConvertUpdateDTOToUpdateCommand() {
-        // Given
-        BankAccountUpdateDTO dto = new BankAccountUpdateDTO();
-        dto.setCode("001");
-        dto.setAgency("5678");
-        dto.setAgencyDigit("0");
-        dto.setAccountNumber("87654321");
-        dto.setAccountDigit("1");
-        dto.setAccountType(AccountTypeEnum.POUPANCA);
-        
-        // When
-        BankAccountUpdateCommandDTO command = bankAccountMapper.toUpdateCommand(dto);
-        
-        // Then
-        assertNotNull(command);
-        assertEquals("001", command.code());
-        assertEquals("5678", command.agency());
-        assertEquals("0", command.agencyDigit());
-        assertEquals("87654321", command.accountNumber());
-        assertEquals("1", command.accountDigit());
-        assertEquals(AccountTypeEnum.POUPANCA, command.accountType());
-    }
     
-    @Test
-    @DisplayName("Deve converter BankAccountViewDTO para BankAccountResponseDTO")
-    void shouldConvertViewToResponseDTO() {
-        // Given
-        BankAccountViewDTO view = new BankAccountViewDTO(
-            bankAccountId,
-            companyId,
-            "001",
-            "1234",
-            "5",
-            "12345678",
-            "9",
-            AccountTypeEnum.CORRENTE,
-            true
-        );
-        
-        // When
-        BankAccountResponseDTO responseDTO = bankAccountMapper.toResponseDTO(view);
-        
-        // Then
-        assertNotNull(responseDTO);
-        assertEquals(bankAccountId, responseDTO.getId());
-        assertEquals(companyId, responseDTO.getCompanyId());
-        assertEquals("001", responseDTO.getCode());
-        assertEquals("1234", responseDTO.getAgency());
-        assertEquals("5", responseDTO.getAgencyDigit());
-        assertEquals("12345678", responseDTO.getAccountNumber());
-        assertEquals("9", responseDTO.getAccountDigit());
-        assertEquals(AccountTypeEnum.CORRENTE, responseDTO.getAccountType());
-        assertTrue(responseDTO.isActive());
-    }
     
-    @Test
-    @DisplayName("Deve retornar null quando converter objeto nulo")
-    void shouldReturnNullWhenConvertingNullObject() {
-        // When & Then
-        assertNull(bankAccountMapper.toDomain((BankAccountCreateCommandDTO) null));
-        assertNull(bankAccountMapper.toDomain((BankAccountUpdateCommandDTO) null, null));
-        assertNull(bankAccountMapper.toViewDTO(null, companyId));
-        assertNull(bankAccountMapper.toCreateCommand(null));
-        assertNull(bankAccountMapper.toUpdateCommand(null));
-        assertNull(bankAccountMapper.toResponseDTO(null));
-    }
     
     @Test
     @DisplayName("Deve converter BankAccountUpdateCommandDTO com campos nulos")

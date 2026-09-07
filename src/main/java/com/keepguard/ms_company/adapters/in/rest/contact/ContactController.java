@@ -1,9 +1,9 @@
 package com.keepguard.ms_company.adapters.in.rest.contact;
 
 import com.keepguard.lib_common.metrics.annotation.MetricsEndpoint;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.request.ContactCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.response.ContactResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.request.ContactUpdateRequestDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactViewDTO;
@@ -47,7 +47,7 @@ public class ContactController {
     })
     public ResponseEntity<ContactResponseDTO> create(
             @Parameter(description = "ID da empresa") @PathVariable UUID companyId,
-            @Valid @RequestBody ContactCreateDTO dto) {
+            @Valid @RequestBody ContactCreateRequestDTO dto) {
         log.info("Criando contato para empresa: {}", companyId);
         ContactCreateCommandDTO command = contactAdapterMapper.toCreateCommand(dto);
         ContactViewDTO view = contactPort.create(companyId, command);
@@ -66,7 +66,7 @@ public class ContactController {
     })
     public ResponseEntity<ContactResponseDTO> update(
             @Parameter(description = "ID do contato") @PathVariable UUID id,
-            @Valid @RequestBody ContactUpdateDTO dto) {
+            @Valid @RequestBody ContactUpdateRequestDTO dto) {
         log.info("Atualizando contato ID: {}", id);
         ContactUpdateCommandDTO command = contactAdapterMapper.toUpdateCommand(dto);
         ContactViewDTO view = contactPort.update(id, command);

@@ -1,8 +1,5 @@
 package com.keepguard.ms_company.application.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactUpdateDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactViewDTO;
@@ -101,69 +98,6 @@ public class ContactApplicationMapper {
             );
         } catch (Exception e) {
             log.error("Erro ao mapear Contact para ContactViewDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    public ContactCreateCommandDTO toCreateCommand(ContactCreateDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        try {
-            return new ContactCreateCommandDTO(
-                dto.getName(),
-                dto.getEmail(),
-                dto.getPhone(),
-                dto.getWebsite(),
-                dto.getPosition(),
-                dto.getDepartment()
-            );
-        } catch (Exception e) {
-            log.error("Erro ao mapear ContactCreateDTO para ContactCreateCommandDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    public ContactUpdateCommandDTO toUpdateCommand(ContactUpdateDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        try {
-            return new ContactUpdateCommandDTO(
-                dto.getName(),
-                dto.getEmail(),
-                dto.getPhone(),
-                dto.getWebsite(),
-                dto.getPosition(),
-                dto.getDepartment()
-            );
-        } catch (Exception e) {
-            log.error("Erro ao mapear ContactUpdateDTO para ContactUpdateCommandDTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    public ContactResponseDTO toResponseDTO(ContactViewDTO viewDTO) {
-        if (viewDTO == null) {
-            return null;
-        }
-
-        try {
-            return ContactResponseDTO.builder()
-                .id(viewDTO.id())
-                .companyId(viewDTO.companyId())
-                .name(viewDTO.name())
-                .email(viewDTO.email())
-                .phone(viewDTO.phone())
-                .website(viewDTO.website())
-                .position(viewDTO.position())
-                .department(viewDTO.department())
-                .active(viewDTO.active())
-                .build();
-        } catch (Exception e) {
-            log.error("Erro ao mapear ContactViewDTO para ContactResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }

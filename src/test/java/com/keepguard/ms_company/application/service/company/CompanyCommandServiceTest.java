@@ -8,7 +8,7 @@ import com.keepguard.ms_company.application.port.out.persistence.CompanyReposito
 import com.keepguard.ms_company.application.port.out.persistence.CompanyPolicyRepositoryPort;
 import com.keepguard.ms_company.application.service.exception.AlreadyExistsException;
 import com.keepguard.ms_company.application.service.exception.NotFoundException;
-import com.keepguard.ms_company.application.service.exception.InvalidStatusForOperationException;
+import com.keepguard.ms_company.domain.exception.InvalidStatusForOperationException;
 import com.keepguard.ms_company.domain.entity.*;
 import com.keepguard.ms_company.domain.enums.AccountTypeEnum;
 import com.keepguard.ms_company.domain.enums.CompanyStatusEnum;

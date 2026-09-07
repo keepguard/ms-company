@@ -4,7 +4,7 @@ import com.keepguard.ms_company.application.dto.company.CompanyViewDTO;
 import com.keepguard.ms_company.application.dto.common.PageResultDTO;
 import com.keepguard.ms_company.application.dto.company.CompanySearchCriteriaDTO;
 import com.keepguard.ms_company.application.mapper.CompanyApplicationMapper;
-import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanySimpleResponseDTO;
+import com.keepguard.ms_company.application.dto.company.CompanySimpleViewDTO;
 import com.keepguard.ms_company.application.port.out.persistence.CompanyRepositoryPort;
 import com.keepguard.ms_company.application.service.exception.NotFoundException;
 import com.keepguard.ms_company.domain.entity.*;
@@ -516,33 +516,33 @@ class CompanyQueryServiceTest {
     void shouldGetCompanyByTenantIdFromCache() {
         // Given
         UUID tenantId = UUID.randomUUID();
-        CompanySimpleResponseDTO simpleResponseDTO = CompanySimpleResponseDTO.builder()
-            .id(companyId)
-            .codeCompany(UUID.randomUUID())
-            .tenantId(tenantId)
-            .name("Empresa Teste")
-            .legalName("Empresa Teste Ltda")
-            .cnpj("11222333000181")
-            .stateRegistration("123456789")
-            .municipalRegistration("987654321")
-            .taxRegime(TaxRegimeEnum.SIMPLES_NACIONAL)
-            .ein("123456789")
-            .status(CompanyStatusEnum.PENDING_APPROVAL)
-            .createdAt(LocalDateTime.now())
-            .updatedAt(LocalDateTime.now())
-            .build();
+        CompanySimpleViewDTO simpleResponseDTO = new CompanySimpleViewDTO(
+            companyId,
+            UUID.randomUUID(),
+            tenantId,
+            "Empresa Teste",
+            "Empresa Teste Ltda",
+            "11222333000181",
+            "123456789",
+            "987654321",
+            TaxRegimeEnum.SIMPLES_NACIONAL,
+            "123456789",
+            CompanyStatusEnum.PENDING_APPROVAL,
+            LocalDateTime.now(),
+            LocalDateTime.now()
+        );
 
         when(companyCachePort.getSimpleCompanyByTenantIdFromCache(tenantId.toString()))
             .thenReturn(simpleResponseDTO);
 
         // When
-        CompanySimpleResponseDTO result = companyQueryService.getSimpleByTenantId(tenantId);
+        CompanySimpleViewDTO result = companyQueryService.getSimpleByTenantId(tenantId);
 
         // Then
         assertNotNull(result);
-        assertEquals(companyId, result.getId());
-        assertEquals(simpleResponseDTO.getName(), result.getName());
-        assertEquals(simpleResponseDTO.getCnpj(), result.getCnpj());
+        assertEquals(companyId, result.id());
+        assertEquals(simpleResponseDTO.name(), result.name());
+        assertEquals(simpleResponseDTO.cnpj(), result.cnpj());
 
         verify(companyCachePort).getSimpleCompanyByTenantIdFromCache(tenantId.toString());
         verify(companyRepository, never()).findByTenantId(any());
@@ -561,21 +561,21 @@ class CompanyQueryServiceTest {
         company.approve();
         
         CompanyViewDTO companyView = CompanyTestBuilder.createDefaultCompanyViewDTO();
-        CompanySimpleResponseDTO simpleResponseDTO = CompanySimpleResponseDTO.builder()
-            .id(companyId)
-            .codeCompany(UUID.randomUUID())
-            .tenantId(tenantId)
-            .name("Empresa Teste")
-            .legalName("Empresa Teste Ltda")
-            .cnpj("11222333000181")
-            .stateRegistration("123456789")
-            .municipalRegistration("987654321")
-            .taxRegime(TaxRegimeEnum.SIMPLES_NACIONAL)
-            .ein("123456789")
-            .status(CompanyStatusEnum.ACTIVE) // Status ativo para passar na validação
-            .createdAt(LocalDateTime.now())
-            .updatedAt(LocalDateTime.now())
-            .build();
+        CompanySimpleViewDTO simpleResponseDTO = new CompanySimpleViewDTO(
+            companyId,
+            UUID.randomUUID(),
+            tenantId,
+            "Empresa Teste",
+            "Empresa Teste Ltda",
+            "11222333000181",
+            "123456789",
+            "987654321",
+            TaxRegimeEnum.SIMPLES_NACIONAL,
+            "123456789",
+            CompanyStatusEnum.ACTIVE,
+            LocalDateTime.now(),
+            LocalDateTime.now()
+        );
 
         when(companyCachePort.getSimpleCompanyByTenantIdFromCache(tenantId.toString()))
             .thenReturn(null);
@@ -583,22 +583,22 @@ class CompanyQueryServiceTest {
             .thenReturn(Optional.of(company));
         when(companyMapper.toViewDTO(company))
             .thenReturn(companyView);
-        when(companyMapper.toSimpleResponseDTO(companyView))
+        when(companyMapper.toSimpleViewDTO(companyView))
             .thenReturn(simpleResponseDTO);
 
         // When
-        CompanySimpleResponseDTO result = companyQueryService.getSimpleByTenantId(tenantId);
+        CompanySimpleViewDTO result = companyQueryService.getSimpleByTenantId(tenantId);
 
         // Then
         assertNotNull(result);
-        assertEquals(companyId, result.getId());
-        assertEquals(simpleResponseDTO.getName(), result.getName());
-        assertEquals(simpleResponseDTO.getCnpj(), result.getCnpj());
+        assertEquals(companyId, result.id());
+        assertEquals(simpleResponseDTO.name(), result.name());
+        assertEquals(simpleResponseDTO.cnpj(), result.cnpj());
 
         verify(companyCachePort).getSimpleCompanyByTenantIdFromCache(tenantId.toString());
         verify(companyRepository).findByTenantId(tenantId);
         verify(companyMapper).toViewDTO(company);
-        verify(companyMapper).toSimpleResponseDTO(companyView);
+        verify(companyMapper).toSimpleViewDTO(companyView);
         verify(companyCachePort).cacheSimpleCompanyByTenantId(tenantId.toString(), simpleResponseDTO);
         verify(metricsPort).incrementCounter(eq("company_queries_total"), any());
     }
@@ -624,7 +624,7 @@ class CompanyQueryServiceTest {
         verify(companyCachePort).getSimpleCompanyByTenantIdFromCache(tenantId.toString());
         verify(companyRepository).findByTenantId(tenantId);
         verify(companyMapper, never()).toViewDTO(any());
-        verify(companyMapper, never()).toSimpleResponseDTO(any());
+        verify(companyMapper, never()).toSimpleViewDTO(any());
         verify(companyCachePort, never()).cacheSimpleCompanyByTenantId(anyString(), any());
         verify(metricsPort).incrementCounter(eq("company_not_found_total"), any());
     }
@@ -653,7 +653,7 @@ class CompanyQueryServiceTest {
         verify(companyCachePort).getSimpleCompanyByTenantIdFromCache(tenantId.toString());
         verify(companyRepository).findByTenantId(tenantId);
         verify(companyMapper, never()).toViewDTO(any());
-        verify(companyMapper, never()).toSimpleResponseDTO(any());
+        verify(companyMapper, never()).toSimpleViewDTO(any());
         verify(companyCachePort, never()).cacheSimpleCompanyByTenantId(anyString(), any());
         verify(metricsPort).incrementCounter(eq("company_invalid_status_total"), any());
     }

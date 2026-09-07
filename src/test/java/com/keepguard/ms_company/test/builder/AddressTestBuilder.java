@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.test.builder;
 
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.request.AddressCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.response.AddressResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.request.AddressUpdateRequestDTO;
 import com.keepguard.ms_company.application.dto.address.AddressCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.address.AddressUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.address.AddressViewDTO;
@@ -186,8 +186,8 @@ public class AddressTestBuilder {
         );
     }
     
-    public AddressCreateDTO buildCreateDTO() {
-        AddressCreateDTO dto = new AddressCreateDTO();
+    public AddressCreateRequestDTO buildCreateDTO() {
+        AddressCreateRequestDTO dto = new AddressCreateRequestDTO();
         dto.setStreet(street);
         dto.setNumber(number);
         dto.setComplement(complement);
@@ -199,8 +199,8 @@ public class AddressTestBuilder {
         return dto;
     }
     
-    public AddressUpdateDTO buildUpdateDTO() {
-        AddressUpdateDTO dto = new AddressUpdateDTO();
+    public AddressUpdateRequestDTO buildUpdateDTO() {
+        AddressUpdateRequestDTO dto = new AddressUpdateRequestDTO();
         dto.setStreet(street);
         dto.setNumber(number);
         dto.setComplement(complement);
@@ -263,11 +263,11 @@ public class AddressTestBuilder {
         return builder().buildUpdateCommand();
     }
     
-    public static AddressCreateDTO createDefaultCreateDTO() {
+    public static AddressCreateRequestDTO createDefaultCreateDTO() {
         return builder().buildCreateDTO();
     }
     
-    public static AddressUpdateDTO createDefaultUpdateDTO() {
+    public static AddressUpdateRequestDTO createDefaultUpdateDTO() {
         return builder().buildUpdateDTO();
     }
     

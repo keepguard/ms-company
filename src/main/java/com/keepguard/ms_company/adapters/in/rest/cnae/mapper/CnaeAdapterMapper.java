@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.adapters.in.rest.cnae.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.cnae.dto.CnaeCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.cnae.dto.CnaeResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.cnae.dto.CnaeUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.cnae.dto.request.CnaeCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.cnae.dto.response.CnaeResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.cnae.dto.request.CnaeUpdateRequestDTO;
 import com.keepguard.ms_company.application.dto.cnae.CnaeCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.cnae.CnaeUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.cnae.CnaeViewDTO;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @Slf4j
 public class CnaeAdapterMapper {
 
-    public CnaeCreateCommandDTO toCreateCommand(CnaeCreateDTO dto, UUID companyId) {
+    public CnaeCreateCommandDTO toCreateCommand(CnaeCreateRequestDTO dto, UUID companyId) {
         if (dto == null) {
             return null;
         }
@@ -33,12 +33,12 @@ public class CnaeAdapterMapper {
                 companyId
             );
         } catch (Exception e) {
-            log.error("Erro ao mapear CnaeCreateDTO para CnaeCreateCommandDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear CnaeCreateRequestDTO para CnaeCreateCommandDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public CnaeUpdateCommandDTO toUpdateCommand(CnaeUpdateDTO dto) {
+    public CnaeUpdateCommandDTO toUpdateCommand(CnaeUpdateRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -54,7 +54,7 @@ public class CnaeAdapterMapper {
                 dto.getSubclassCode()
             );
         } catch (Exception e) {
-            log.error("Erro ao mapear CnaeUpdateDTO para CnaeUpdateCommandDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear CnaeUpdateRequestDTO para CnaeUpdateCommandDTO: {}", e.getMessage(), e);
             throw e;
         }
     }

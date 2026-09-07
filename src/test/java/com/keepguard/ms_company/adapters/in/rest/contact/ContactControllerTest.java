@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.adapters.in.rest.contact;
 
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.request.ContactCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.response.ContactResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.request.ContactUpdateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.contact.mapper.ContactAdapterMapper;
 import com.keepguard.ms_company.application.dto.contact.ContactCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactUpdateCommandDTO;
@@ -72,13 +72,13 @@ class ContactControllerTest {
     @DisplayName("Deve criar contato com DTO válido")
     void shouldCreateContactWithValidDTO() {
         // Given
-        ContactCreateDTO createDTO = ContactTestBuilder.builder()
+        ContactCreateRequestDTO createDTO = ContactTestBuilder.builder()
             .buildCreateDTO();
             
         ContactCreateCommandDTO createCommand = ContactTestBuilder.builder()
             .buildCreateCommand();
 
-        when(contactAdapterMapper.toCreateCommand(any(ContactCreateDTO.class)))
+        when(contactAdapterMapper.toCreateCommand(any(ContactCreateRequestDTO.class)))
             .thenReturn(createCommand);
         when(contactPort.create(eq(companyId), any(ContactCreateCommandDTO.class)))
             .thenReturn(contactView);
@@ -97,7 +97,7 @@ class ContactControllerTest {
         assertEquals(createDTO.getName(), responseBody.getName());
         assertEquals(createDTO.getEmail(), responseBody.getEmail());
         
-        verify(contactAdapterMapper, times(1)).toCreateCommand(any(ContactCreateDTO.class));
+        verify(contactAdapterMapper, times(1)).toCreateCommand(any(ContactCreateRequestDTO.class));
         verify(contactPort, times(1)).create(eq(companyId), any(ContactCreateCommandDTO.class));
         verify(contactAdapterMapper, times(1)).toResponseDTO(any(ContactViewDTO.class));
     }
@@ -106,13 +106,13 @@ class ContactControllerTest {
     @DisplayName("Deve lidar com exceções durante criação")
     void shouldHandleExceptionsDuringCreation() {
         // Given
-        ContactCreateDTO createDTO = ContactTestBuilder.builder()
+        ContactCreateRequestDTO createDTO = ContactTestBuilder.builder()
             .buildCreateDTO();
             
         ContactCreateCommandDTO createCommand = ContactTestBuilder.builder()
             .buildCreateCommand();
 
-        when(contactAdapterMapper.toCreateCommand(any(ContactCreateDTO.class)))
+        when(contactAdapterMapper.toCreateCommand(any(ContactCreateRequestDTO.class)))
             .thenReturn(createCommand);
         when(contactPort.create(eq(companyId), any(ContactCreateCommandDTO.class)))
             .thenThrow(new RuntimeException("Service error"));
@@ -122,7 +122,7 @@ class ContactControllerTest {
             contactController.create(companyId, createDTO);
         });
         
-        verify(contactAdapterMapper, times(1)).toCreateCommand(any(ContactCreateDTO.class));
+        verify(contactAdapterMapper, times(1)).toCreateCommand(any(ContactCreateRequestDTO.class));
         verify(contactPort, times(1)).create(eq(companyId), any(ContactCreateCommandDTO.class));
     }
 
@@ -130,7 +130,7 @@ class ContactControllerTest {
     @DisplayName("Deve atualizar contato com DTO válido")
     void shouldUpdateContactWithValidDTO() {
         // Given
-        ContactUpdateDTO updateDTO = ContactTestBuilder.builder()
+        ContactUpdateRequestDTO updateDTO = ContactTestBuilder.builder()
             .withName("Contato Atualizado")
             .withEmail("contato.atualizado@email.com")
             .buildUpdateDTO();
@@ -140,7 +140,7 @@ class ContactControllerTest {
             .withEmail("contato.atualizado@email.com")
             .buildUpdateCommand();
 
-        when(contactAdapterMapper.toUpdateCommand(any(ContactUpdateDTO.class)))
+        when(contactAdapterMapper.toUpdateCommand(any(ContactUpdateRequestDTO.class)))
             .thenReturn(updateCommand);
         when(contactPort.update(eq(contactId), any(ContactUpdateCommandDTO.class)))
             .thenReturn(contactView);
@@ -164,7 +164,7 @@ class ContactControllerTest {
         assertEquals(updateDTO.getName(), responseBody.getName());
         assertEquals(updateDTO.getEmail(), responseBody.getEmail());
         
-        verify(contactAdapterMapper, times(1)).toUpdateCommand(any(ContactUpdateDTO.class));
+        verify(contactAdapterMapper, times(1)).toUpdateCommand(any(ContactUpdateRequestDTO.class));
         verify(contactPort, times(1)).update(eq(contactId), any(ContactUpdateCommandDTO.class));
         verify(contactAdapterMapper, times(1)).toResponseDTO(any(ContactViewDTO.class));
     }
@@ -173,7 +173,7 @@ class ContactControllerTest {
     @DisplayName("Deve lidar com exceções durante atualização")
     void shouldHandleExceptionsDuringUpdate() {
         // Given
-        ContactUpdateDTO updateDTO = ContactTestBuilder.builder()
+        ContactUpdateRequestDTO updateDTO = ContactTestBuilder.builder()
             .withName("Contato Atualizado")
             .buildUpdateDTO();
             
@@ -181,7 +181,7 @@ class ContactControllerTest {
             .withName("Contato Atualizado")
             .buildUpdateCommand();
 
-        when(contactAdapterMapper.toUpdateCommand(any(ContactUpdateDTO.class)))
+        when(contactAdapterMapper.toUpdateCommand(any(ContactUpdateRequestDTO.class)))
             .thenReturn(updateCommand);
         when(contactPort.update(eq(contactId), any(ContactUpdateCommandDTO.class)))
             .thenThrow(new RuntimeException("Service error"));
@@ -191,7 +191,7 @@ class ContactControllerTest {
             contactController.update(contactId, updateDTO);
         });
         
-        verify(contactAdapterMapper, times(1)).toUpdateCommand(any(ContactUpdateDTO.class));
+        verify(contactAdapterMapper, times(1)).toUpdateCommand(any(ContactUpdateRequestDTO.class));
         verify(contactPort, times(1)).update(eq(contactId), any(ContactUpdateCommandDTO.class));
     }
 

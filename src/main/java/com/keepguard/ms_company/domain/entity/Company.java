@@ -230,7 +230,7 @@ public final class Company {
 
     public void validateStatusForOperations() {
         if (isBlockedOrSuspended()) {
-            throw new com.keepguard.ms_company.application.service.exception.InvalidStatusForOperationException(
+            throw new com.keepguard.ms_company.domain.exception.InvalidStatusForOperationException(
                 "Não é possível realizar operações na empresa com status '" + this.status.getDescription() + "'. " +
                 "Operações são permitidas apenas para empresas com status Ativa, Inativa ou Aguardando Aprovação."
             );

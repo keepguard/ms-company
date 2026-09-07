@@ -1,9 +1,9 @@
 package com.keepguard.ms_company.adapters.in.rest.address;
 
 import com.keepguard.lib_common.metrics.annotation.MetricsEndpoint;
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.request.AddressCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.response.AddressResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.request.AddressUpdateRequestDTO;
 import com.keepguard.ms_company.application.dto.address.AddressCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.address.AddressUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.address.AddressViewDTO;
@@ -46,7 +46,7 @@ public class AddressController {
     })
     public ResponseEntity<AddressResponseDTO> create(
             @Parameter(description = "ID da empresa") @PathVariable UUID companyId,
-            @Valid @RequestBody AddressCreateDTO dto) {
+            @Valid @RequestBody AddressCreateRequestDTO dto) {
         log.info("Criando endereço para empresa: {}", companyId);
         AddressCreateCommandDTO command = addressAdapterMapper.toCreateCommand(dto);
         AddressViewDTO view = addressPort.create(companyId, command);
@@ -64,7 +64,7 @@ public class AddressController {
     })
     public ResponseEntity<AddressResponseDTO> update(
             @Parameter(description = "ID do endereço") @PathVariable UUID id,
-            @Valid @RequestBody AddressUpdateDTO dto) {
+            @Valid @RequestBody AddressUpdateRequestDTO dto) {
         log.info("Atualizando endereço ID: {}", id);
         AddressUpdateCommandDTO command = addressAdapterMapper.toUpdateCommand(dto);
         AddressViewDTO view = addressPort.update(id, command);

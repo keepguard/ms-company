@@ -1,9 +1,9 @@
 package com.keepguard.ms_company.adapters.in.rest.representative;
 
 import com.keepguard.lib_common.metrics.annotation.MetricsEndpoint;
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.representative.dto.request.RepresentativeCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.representative.dto.response.RepresentativeResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.representative.dto.request.RepresentativeUpdateRequestDTO;
 import com.keepguard.ms_company.application.dto.representative.RepresentativeCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.representative.RepresentativeUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.representative.RepresentativeViewDTO;
@@ -45,7 +45,7 @@ public class RepresentativeController {
     })
     public ResponseEntity<RepresentativeResponseDTO> create(
             @Parameter(description = "ID da empresa") @PathVariable UUID companyId,
-            @Valid @RequestBody RepresentativeCreateDTO dto) {
+            @Valid @RequestBody RepresentativeCreateRequestDTO dto) {
         log.info("Criando representante para empresa: {}", companyId);
         RepresentativeCreateCommandDTO command = representativeAdapterMapper.toCreateCommand(dto, companyId);
         RepresentativeViewDTO view = representativePort.create(companyId, command);
@@ -63,7 +63,7 @@ public class RepresentativeController {
     })
     public ResponseEntity<RepresentativeResponseDTO> update(
             @Parameter(description = "ID do representante") @PathVariable UUID id,
-            @Valid @RequestBody RepresentativeUpdateDTO dto) {
+            @Valid @RequestBody RepresentativeUpdateRequestDTO dto) {
         log.info("Atualizando representante: {}", id);
         RepresentativeUpdateCommandDTO command = representativeAdapterMapper.toUpdateCommand(dto);
         RepresentativeViewDTO view = representativePort.update(id, command);

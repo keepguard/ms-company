@@ -1,9 +1,9 @@
 package com.keepguard.ms_company.adapters.in.rest.cnae;
 
 import com.keepguard.lib_common.metrics.annotation.MetricsEndpoint;
-import com.keepguard.ms_company.adapters.in.rest.cnae.dto.CnaeCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.cnae.dto.CnaeResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.cnae.dto.CnaeUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.cnae.dto.request.CnaeCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.cnae.dto.response.CnaeResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.cnae.dto.request.CnaeUpdateRequestDTO;
 import com.keepguard.ms_company.application.dto.cnae.CnaeCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.cnae.CnaeUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.cnae.CnaeViewDTO;
@@ -44,7 +44,7 @@ public class CnaeController {
     })
     public ResponseEntity<CnaeResponseDTO> create(
             @Parameter(description = "ID da empresa") @PathVariable UUID companyId,
-            @Valid @RequestBody CnaeCreateDTO dto) {
+            @Valid @RequestBody CnaeCreateRequestDTO dto) {
         log.info("Criando CNAE para empresa: {}", companyId);
         CnaeCreateCommandDTO command = cnaeAdapterMapper.toCreateCommand(dto, companyId);
         CnaeViewDTO view = cnaePort.create(companyId, command);
@@ -63,7 +63,7 @@ public class CnaeController {
     public ResponseEntity<CnaeResponseDTO> update(
             @Parameter(description = "ID da empresa") @PathVariable UUID companyId,
             @Parameter(description = "ID do CNAE") @PathVariable UUID id,
-            @Valid @RequestBody CnaeUpdateDTO dto) {
+            @Valid @RequestBody CnaeUpdateRequestDTO dto) {
         log.info("Atualizando CNAE ID: {}", id);
 
         CnaeUpdateCommandDTO command = cnaeAdapterMapper.toUpdateCommand(dto);

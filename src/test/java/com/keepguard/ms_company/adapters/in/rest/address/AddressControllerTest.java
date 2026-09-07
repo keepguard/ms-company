@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.adapters.in.rest.address;
 
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.request.AddressCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.response.AddressResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.request.AddressUpdateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.address.mapper.AddressAdapterMapper;
 import com.keepguard.ms_company.application.dto.address.AddressCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.address.AddressUpdateCommandDTO;
@@ -72,13 +72,13 @@ class AddressControllerTest {
     @DisplayName("Deve criar endereço com DTO válido")
     void shouldCreateAddressWithValidDTO() {
         // Given
-        AddressCreateDTO createDTO = AddressTestBuilder.builder()
+        AddressCreateRequestDTO createDTO = AddressTestBuilder.builder()
             .buildCreateDTO();
             
         AddressCreateCommandDTO createCommand = AddressTestBuilder.builder()
             .buildCreateCommand();
 
-        when(addressAdapterMapper.toCreateCommand(any(AddressCreateDTO.class)))
+        when(addressAdapterMapper.toCreateCommand(any(AddressCreateRequestDTO.class)))
             .thenReturn(createCommand);
         when(addressPort.create(eq(companyId), any(AddressCreateCommandDTO.class)))
             .thenReturn(addressView);
@@ -99,7 +99,7 @@ class AddressControllerTest {
         assertEquals(createDTO.getCity(), responseBody.getCity());
         assertEquals(createDTO.getState(), responseBody.getState());
         
-        verify(addressAdapterMapper, times(1)).toCreateCommand(any(AddressCreateDTO.class));
+        verify(addressAdapterMapper, times(1)).toCreateCommand(any(AddressCreateRequestDTO.class));
         verify(addressPort, times(1)).create(eq(companyId), any(AddressCreateCommandDTO.class));
         verify(addressAdapterMapper, times(1)).toResponseDTO(any(AddressViewDTO.class));
     }
@@ -108,13 +108,13 @@ class AddressControllerTest {
     @DisplayName("Deve lidar com exceções durante criação")
     void shouldHandleExceptionsDuringCreation() {
         // Given
-        AddressCreateDTO createDTO = AddressTestBuilder.builder()
+        AddressCreateRequestDTO createDTO = AddressTestBuilder.builder()
             .buildCreateDTO();
             
         AddressCreateCommandDTO createCommand = AddressTestBuilder.builder()
             .buildCreateCommand();
 
-        when(addressAdapterMapper.toCreateCommand(any(AddressCreateDTO.class)))
+        when(addressAdapterMapper.toCreateCommand(any(AddressCreateRequestDTO.class)))
             .thenReturn(createCommand);
         when(addressPort.create(eq(companyId), any(AddressCreateCommandDTO.class)))
             .thenThrow(new RuntimeException("Service error"));
@@ -124,7 +124,7 @@ class AddressControllerTest {
             addressController.create(companyId, createDTO);
         });
         
-        verify(addressAdapterMapper, times(1)).toCreateCommand(any(AddressCreateDTO.class));
+        verify(addressAdapterMapper, times(1)).toCreateCommand(any(AddressCreateRequestDTO.class));
         verify(addressPort, times(1)).create(eq(companyId), any(AddressCreateCommandDTO.class));
     }
 
@@ -132,7 +132,7 @@ class AddressControllerTest {
     @DisplayName("Deve atualizar endereço com DTO válido")
     void shouldUpdateAddressWithValidDTO() {
         // Given
-        AddressUpdateDTO updateDTO = AddressTestBuilder.builder()
+        AddressUpdateRequestDTO updateDTO = AddressTestBuilder.builder()
             .withStreet("Rua Atualizada")
             .withCity("São Paulo Atualizada")
             .buildUpdateDTO();
@@ -142,7 +142,7 @@ class AddressControllerTest {
             .withCity("São Paulo Atualizada")
             .buildUpdateCommand();
 
-        when(addressAdapterMapper.toUpdateCommand(any(AddressUpdateDTO.class)))
+        when(addressAdapterMapper.toUpdateCommand(any(AddressUpdateRequestDTO.class)))
             .thenReturn(updateCommand);
         when(addressPort.update(eq(addressId), any(AddressUpdateCommandDTO.class)))
             .thenReturn(addressView);
@@ -165,7 +165,7 @@ class AddressControllerTest {
         assertEquals(addressId, responseBody.getId());
         assertEquals(updateDTO.getStreet(), responseBody.getStreet());
         
-        verify(addressAdapterMapper, times(1)).toUpdateCommand(any(AddressUpdateDTO.class));
+        verify(addressAdapterMapper, times(1)).toUpdateCommand(any(AddressUpdateRequestDTO.class));
         verify(addressPort, times(1)).update(eq(addressId), any(AddressUpdateCommandDTO.class));
         verify(addressAdapterMapper, times(1)).toResponseDTO(any(AddressViewDTO.class));
     }
@@ -174,7 +174,7 @@ class AddressControllerTest {
     @DisplayName("Deve lidar com exceções durante atualização")
     void shouldHandleExceptionsDuringUpdate() {
         // Given
-        AddressUpdateDTO updateDTO = AddressTestBuilder.builder()
+        AddressUpdateRequestDTO updateDTO = AddressTestBuilder.builder()
             .withStreet("Rua Atualizada")
             .buildUpdateDTO();
             
@@ -182,7 +182,7 @@ class AddressControllerTest {
             .withStreet("Rua Atualizada")
             .buildUpdateCommand();
 
-        when(addressAdapterMapper.toUpdateCommand(any(AddressUpdateDTO.class)))
+        when(addressAdapterMapper.toUpdateCommand(any(AddressUpdateRequestDTO.class)))
             .thenReturn(updateCommand);
         when(addressPort.update(eq(addressId), any(AddressUpdateCommandDTO.class)))
             .thenThrow(new RuntimeException("Service error"));
@@ -192,7 +192,7 @@ class AddressControllerTest {
             addressController.update(addressId, updateDTO);
         });
         
-        verify(addressAdapterMapper, times(1)).toUpdateCommand(any(AddressUpdateDTO.class));
+        verify(addressAdapterMapper, times(1)).toUpdateCommand(any(AddressUpdateRequestDTO.class));
         verify(addressPort, times(1)).update(eq(addressId), any(AddressUpdateCommandDTO.class));
     }
 

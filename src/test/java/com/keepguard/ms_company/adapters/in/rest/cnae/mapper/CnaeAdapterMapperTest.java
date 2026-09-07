@@ -1,6 +1,6 @@
 package com.keepguard.ms_company.adapters.in.rest.cnae.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.cnae.dto.CnaeResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.cnae.dto.response.CnaeResponseDTO;
 import com.keepguard.ms_company.application.dto.cnae.CnaeCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.cnae.CnaeUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.cnae.CnaeViewDTO;
@@ -34,7 +34,7 @@ class CnaeAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve mapear CnaeCreateDTO para CnaeCreateCommandDTO com sucesso")
+    @DisplayName("Deve mapear CnaeCreateRequestDTO para CnaeCreateCommandDTO com sucesso")
     void shouldMapCnaeCreateDTOToCnaeCreateCommandDTOSuccessfully() {
         // Given
         // CnaeTestBuilder não possui buildCreateDTO, então testamos com null
@@ -47,7 +47,7 @@ class CnaeAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve retornar null quando CnaeCreateDTO for null")
+    @DisplayName("Deve retornar null quando CnaeCreateRequestDTO for null")
     void shouldReturnNullWhenCnaeCreateDTOIsNull() {
         // When
         CnaeCreateCommandDTO result = cnaeAdapterMapper.toCreateCommand(null, companyId);
@@ -57,7 +57,7 @@ class CnaeAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve mapear CnaeUpdateDTO para CnaeUpdateCommandDTO com sucesso")
+    @DisplayName("Deve mapear CnaeUpdateRequestDTO para CnaeUpdateCommandDTO com sucesso")
     void shouldMapCnaeUpdateDTOToCnaeUpdateCommandDTOSuccessfully() {
         // Given
         // CnaeTestBuilder não possui buildUpdateDTO, então testamos com null
@@ -70,7 +70,7 @@ class CnaeAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve retornar null quando CnaeUpdateDTO for null")
+    @DisplayName("Deve retornar null quando CnaeUpdateRequestDTO for null")
     void shouldReturnNullWhenCnaeUpdateDTOIsNull() {
         // When
         CnaeUpdateCommandDTO result = cnaeAdapterMapper.toUpdateCommand(null);

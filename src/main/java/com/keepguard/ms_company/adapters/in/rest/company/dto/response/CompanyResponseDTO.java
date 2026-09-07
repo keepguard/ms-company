@@ -2,7 +2,7 @@ package com.keepguard.ms_company.adapters.in.rest.company.dto.response;
 
 import com.keepguard.ms_company.domain.enums.CompanyStatusEnum;
 import com.keepguard.ms_company.domain.enums.TaxRegimeEnum;
-import com.keepguard.ms_company.adapters.in.rest.cnae.dto.CnaeResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.cnae.dto.response.CnaeResponseDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.AddressDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.ContactDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.RepresentativeDTO;

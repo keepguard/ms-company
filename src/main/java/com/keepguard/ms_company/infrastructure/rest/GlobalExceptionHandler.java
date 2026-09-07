@@ -4,7 +4,7 @@ import com.keepguard.lib_common.exception.InvalidStatusException;
 import com.keepguard.lib_common.exception.ValidationException;
 import com.keepguard.ms_company.application.service.exception.NotFoundException;
 import com.keepguard.ms_company.application.service.exception.AlreadyExistsException;
-import com.keepguard.ms_company.application.service.exception.InvalidStatusForOperationException;
+import com.keepguard.ms_company.domain.exception.InvalidStatusForOperationException;
 import com.keepguard.ms_company.application.service.exception.CommandOperationException;
 import com.keepguard.ms_company.application.service.exception.QueryOperationException;
 import com.keepguard.lib_common.logging.service.LoggingService;
@@ -149,8 +149,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(problemDetail);
     }
 
-    @ExceptionHandler(InvalidStatusForOperationException.class)
-    public ResponseEntity<ProblemDetail> handleInvalidStatusForOperationException(InvalidStatusForOperationException ex, WebRequest request) {
+    @ExceptionHandler({
+            InvalidStatusForOperationException.class,
+            com.keepguard.ms_company.application.service.exception.InvalidStatusForOperationException.class
+    })
+    public ResponseEntity<ProblemDetail> handleInvalidStatusForOperationException(RuntimeException ex, WebRequest request) {
         // Log estruturado da exceção
         Map<String, Object> context = Map.of(
             "errorType", "INVALID_STATUS_FOR_OPERATION",

@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.adapters.in.rest.representative.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.representative.dto.RepresentativeUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.representative.dto.request.RepresentativeCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.representative.dto.response.RepresentativeResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.representative.dto.request.RepresentativeUpdateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.RepresentativeDTO;
 import com.keepguard.ms_company.application.dto.representative.RepresentativeCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.representative.RepresentativeUpdateCommandDTO;
@@ -37,10 +37,10 @@ class RepresentativeAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve mapear RepresentativeCreateDTO para RepresentativeCreateCommandDTO com sucesso")
+    @DisplayName("Deve mapear RepresentativeCreateRequestDTO para RepresentativeCreateCommandDTO com sucesso")
     void shouldMapRepresentativeCreateDTOToRepresentativeCreateCommandDTOSuccessfully() {
         // Given
-        RepresentativeCreateDTO dto = RepresentativeTestBuilder.builder()
+        RepresentativeCreateRequestDTO dto = RepresentativeTestBuilder.builder()
             .buildCreateDTO();
         
         // When
@@ -58,7 +58,7 @@ class RepresentativeAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve retornar null quando RepresentativeCreateDTO for null")
+    @DisplayName("Deve retornar null quando RepresentativeCreateRequestDTO for null")
     void shouldReturnNullWhenRepresentativeCreateDTOIsNull() {
         // When
         RepresentativeCreateCommandDTO result = representativeAdapterMapper.toCreateCommand(null, companyId);
@@ -68,10 +68,10 @@ class RepresentativeAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve mapear RepresentativeUpdateDTO para RepresentativeUpdateCommandDTO com sucesso")
+    @DisplayName("Deve mapear RepresentativeUpdateRequestDTO para RepresentativeUpdateCommandDTO com sucesso")
     void shouldMapRepresentativeUpdateDTOToRepresentativeUpdateCommandDTOSuccessfully() {
         // Given
-        RepresentativeUpdateDTO dto = RepresentativeTestBuilder.builder()
+        RepresentativeUpdateRequestDTO dto = RepresentativeTestBuilder.builder()
             .withMariaSilva()
             .buildUpdateDTO();
         
@@ -90,7 +90,7 @@ class RepresentativeAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve retornar null quando RepresentativeUpdateDTO for null")
+    @DisplayName("Deve retornar null quando RepresentativeUpdateRequestDTO for null")
     void shouldReturnNullWhenRepresentativeUpdateDTOIsNull() {
         // When
         RepresentativeUpdateCommandDTO result = representativeAdapterMapper.toUpdateCommand(null);

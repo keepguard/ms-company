@@ -1,7 +1,8 @@
 package com.keepguard.ms_company.application.service.company;
 
-import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanySimpleResponseDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyCreateCommandDTO;
+import com.keepguard.ms_company.application.dto.company.CompanyMfaChannelCommandDTO;
+import com.keepguard.ms_company.application.dto.company.CompanySimpleViewDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyViewDTO;
 import com.keepguard.ms_company.application.dto.common.PageResultDTO;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -64,7 +66,7 @@ public class CompanyUseCaseService implements CompanyPort {
     }
 
     @Override
-    public CompanyViewDTO updateMfaChannels(UUID id, java.util.List<com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyMfaChannelRequestDTO> channels) {
+    public CompanyViewDTO updateMfaChannels(UUID id, List<CompanyMfaChannelCommandDTO> channels) {
         return commandService.updateMfaChannels(id, channels);
     }
 
@@ -96,7 +98,7 @@ public class CompanyUseCaseService implements CompanyPort {
     }
 
     @Override
-    public CompanySimpleResponseDTO getSimpleByTenantId(UUID tenantId) {
+    public CompanySimpleViewDTO getSimpleByTenantId(UUID tenantId) {
         return queryService.getSimpleByTenantId(tenantId);
     }
 

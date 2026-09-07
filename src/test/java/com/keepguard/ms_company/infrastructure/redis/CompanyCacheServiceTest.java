@@ -1,7 +1,7 @@
 package com.keepguard.ms_company.infrastructure.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanySimpleResponseDTO;
+import com.keepguard.ms_company.application.dto.company.CompanySimpleViewDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyViewDTO;
 import com.keepguard.ms_company.test.builder.CompanyTestBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,17 +59,26 @@ class CompanyCacheServiceTest {
 
     private String tenantId;
     private CompanyViewDTO companyView;
-    private CompanySimpleResponseDTO simpleView;
+    private CompanySimpleViewDTO simpleView;
 
     @BeforeEach
     void setUp() {
         tenantId = UUID.randomUUID().toString();
         companyView = CompanyTestBuilder.createDefaultCompanyViewDTO();
-        simpleView = CompanySimpleResponseDTO.builder()
-                .id(companyView.id())
-                .tenantId(UUID.fromString(tenantId))
-                .name(companyView.name())
-                .build();
+        simpleView = new CompanySimpleViewDTO(
+                companyView.id(),
+                companyView.codeCompany(),
+                UUID.fromString(tenantId),
+                companyView.name(),
+                companyView.legalName(),
+                companyView.cnpj(),
+                companyView.stateRegistration(),
+                companyView.municipalRegistration(),
+                companyView.taxRegime(),
+                companyView.ein(),
+                companyView.status(),
+                companyView.createdAt(),
+                companyView.updatedAt());
 
         ReflectionTestUtils.setField(companyCacheService, "companyTtlSeconds", TTL);
         ReflectionTestUtils.setField(companyCacheService, "companyCachePrefix", PREFIX);

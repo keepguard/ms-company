@@ -5,17 +5,22 @@ import com.keepguard.ms_company.adapters.in.rest.bankaccount.mapper.BankAccountA
 import com.keepguard.ms_company.adapters.in.rest.cnae.mapper.CnaeAdapterMapper;
 import com.keepguard.ms_company.adapters.in.rest.contact.mapper.ContactAdapterMapper;
 import com.keepguard.ms_company.adapters.in.rest.representative.mapper.RepresentativeAdapterMapper;
-import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyMfaChannelRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyUpdateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanyMfaChannelResponseDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanyResponseDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanySimpleResponseDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyCreateCommandDTO;
+import com.keepguard.ms_company.application.dto.company.CompanyMfaChannelCommandDTO;
+import com.keepguard.ms_company.application.dto.company.CompanySimpleViewDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyViewDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Slf4j
@@ -28,7 +33,7 @@ public class CompanyAdapterMapper {
     private final BankAccountAdapterMapper bankAccountAdapterMapper;
     private final CnaeAdapterMapper cnaeAdapterMapper;
 
-    public CompanyCreateCommandDTO toCreateCommand(CompanyCreateDTO dto) {
+    public CompanyCreateCommandDTO toCreateCommand(CompanyCreateRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -44,12 +49,12 @@ public class CompanyAdapterMapper {
                 dto.getEin()
             );
         } catch (Exception e) {
-            log.error("Erro ao mapear CompanyCreateDTO para CompanyCreateCommandDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear CompanyCreateRequestDTO para CompanyCreateCommandDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public CompanyUpdateCommandDTO toUpdateCommand(CompanyUpdateDTO dto) {
+    public CompanyUpdateCommandDTO toUpdateCommand(CompanyUpdateRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -64,7 +69,7 @@ public class CompanyAdapterMapper {
                 dto.getEin()
             );
         } catch (Exception e) {
-            log.error("Erro ao mapear CompanyUpdateDTO para CompanyUpdateCommandDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear CompanyUpdateRequestDTO para CompanyUpdateCommandDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
@@ -109,7 +114,7 @@ public class CompanyAdapterMapper {
         }
     }
 
-    public CompanySimpleResponseDTO toSimpleResponseDTO(CompanyViewDTO view) {
+    public CompanySimpleResponseDTO toSimpleResponseDTO(CompanySimpleViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -131,8 +136,17 @@ public class CompanyAdapterMapper {
                 .updatedAt(view.updatedAt())
                 .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear CompanyViewDTO para CompanySimpleResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear CompanySimpleViewDTO para CompanySimpleResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
+    }
+
+    public List<CompanyMfaChannelCommandDTO> toMfaChannelCommands(List<CompanyMfaChannelRequestDTO> channels) {
+        if (channels == null) {
+            return List.of();
+        }
+        return channels.stream()
+            .map(ch -> new CompanyMfaChannelCommandDTO(ch.channel(), ch.required(), ch.enabled()))
+            .toList();
     }
 }

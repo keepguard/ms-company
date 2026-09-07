@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.test.builder;
 
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.request.BankAccountCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.response.BankAccountResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.request.BankAccountUpdateRequestDTO;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountViewDTO;
@@ -148,8 +148,8 @@ public class BankAccountTestBuilder {
         );
     }
     
-    public BankAccountCreateDTO buildCreateDTO() {
-        BankAccountCreateDTO dto = new BankAccountCreateDTO();
+    public BankAccountCreateRequestDTO buildCreateDTO() {
+        BankAccountCreateRequestDTO dto = new BankAccountCreateRequestDTO();
         dto.setCode(code);
         dto.setAgency(agency);
         dto.setAgencyDigit(agencyDigit);
@@ -159,8 +159,8 @@ public class BankAccountTestBuilder {
         return dto;
     }
     
-    public BankAccountUpdateDTO buildUpdateDTO() {
-        BankAccountUpdateDTO dto = new BankAccountUpdateDTO();
+    public BankAccountUpdateRequestDTO buildUpdateDTO() {
+        BankAccountUpdateRequestDTO dto = new BankAccountUpdateRequestDTO();
         dto.setCode(code);
         dto.setAgency(agency);
         dto.setAgencyDigit(agencyDigit);

@@ -1,7 +1,7 @@
 package com.keepguard.ms_company.domain.entity;
 
 import com.keepguard.lib_common.exception.ValidationException;
-import com.keepguard.ms_company.application.service.exception.InvalidStatusForOperationException;
+import com.keepguard.ms_company.domain.exception.InvalidStatusForOperationException;
 import com.keepguard.ms_company.domain.enums.AccountTypeEnum;
 import com.keepguard.ms_company.domain.enums.CompanyStatusEnum;
 import com.keepguard.ms_company.domain.enums.TaxRegimeEnum;

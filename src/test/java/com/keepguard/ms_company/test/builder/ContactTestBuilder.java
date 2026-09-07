@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.test.builder;
 
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.request.ContactCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.response.ContactResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.request.ContactUpdateRequestDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactViewDTO;
@@ -96,8 +96,8 @@ public class ContactTestBuilder {
         return new ContactViewDTO(id, companyId, name, email, phone, website, position, department, active);
     }
     
-    public ContactCreateDTO buildCreateDTO() {
-        return ContactCreateDTO.builder()
+    public ContactCreateRequestDTO buildCreateDTO() {
+        return ContactCreateRequestDTO.builder()
             .name(name)
             .email(email)
             .phone(phone)
@@ -107,8 +107,8 @@ public class ContactTestBuilder {
             .build();
     }
     
-    public ContactUpdateDTO buildUpdateDTO() {
-        return ContactUpdateDTO.builder()
+    public ContactUpdateRequestDTO buildUpdateDTO() {
+        return ContactUpdateRequestDTO.builder()
             .name(name)
             .email(email)
             .phone(phone)

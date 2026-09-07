@@ -1,7 +1,7 @@
 package com.keepguard.ms_company.adapters.in.rest.company;
 
-import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyUpdateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanyResponseDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.mapper.CompanyAdapterMapper;
 import com.keepguard.ms_company.application.dto.company.CompanyCreateCommandDTO;
@@ -71,13 +71,13 @@ class CompanyControllerTest {
     @DisplayName("Deve criar empresa com DTO válido")
     void shouldCreateCompanyWithValidDTO() {
         // Given
-        CompanyCreateDTO createDTO = CompanyTestBuilder.builder()
+        CompanyCreateRequestDTO createDTO = CompanyTestBuilder.builder()
             .buildCreateDTO();
             
         CompanyCreateCommandDTO createCommand = CompanyTestBuilder.builder()
             .buildCreateCommand();
 
-        when(companyAdapterMapper.toCreateCommand(any(CompanyCreateDTO.class)))
+        when(companyAdapterMapper.toCreateCommand(any(CompanyCreateRequestDTO.class)))
             .thenReturn(createCommand);
         when(companyPort.create(any(CompanyCreateCommandDTO.class)))
             .thenReturn(companyView);
@@ -96,7 +96,7 @@ class CompanyControllerTest {
         assertEquals(createDTO.getLegalName(), responseBody.getLegalName());
         assertEquals(createDTO.getCnpj(), responseBody.getCnpj());
         
-        verify(companyAdapterMapper, times(1)).toCreateCommand(any(CompanyCreateDTO.class));
+        verify(companyAdapterMapper, times(1)).toCreateCommand(any(CompanyCreateRequestDTO.class));
         verify(companyPort, times(1)).create(any(CompanyCreateCommandDTO.class));
         verify(companyAdapterMapper, times(1)).toResponseDTO(any(CompanyViewDTO.class));
     }
@@ -105,13 +105,13 @@ class CompanyControllerTest {
     @DisplayName("Deve lidar com exceções durante criação")
     void shouldHandleExceptionsDuringCreation() {
         // Given
-        CompanyCreateDTO createDTO = CompanyTestBuilder.builder()
+        CompanyCreateRequestDTO createDTO = CompanyTestBuilder.builder()
             .buildCreateDTO();
             
         CompanyCreateCommandDTO createCommand = CompanyTestBuilder.builder()
             .buildCreateCommand();
 
-        when(companyAdapterMapper.toCreateCommand(any(CompanyCreateDTO.class)))
+        when(companyAdapterMapper.toCreateCommand(any(CompanyCreateRequestDTO.class)))
             .thenReturn(createCommand);
         when(companyPort.create(any(CompanyCreateCommandDTO.class)))
             .thenThrow(new RuntimeException("Service error"));
@@ -121,7 +121,7 @@ class CompanyControllerTest {
             companyController.create(createDTO);
         });
         
-        verify(companyAdapterMapper, times(1)).toCreateCommand(any(CompanyCreateDTO.class));
+        verify(companyAdapterMapper, times(1)).toCreateCommand(any(CompanyCreateRequestDTO.class));
         verify(companyPort, times(1)).create(any(CompanyCreateCommandDTO.class));
     }
 
@@ -129,7 +129,7 @@ class CompanyControllerTest {
     @DisplayName("Deve atualizar empresa com DTO válido")
     void shouldUpdateCompanyWithValidDTO() {
         // Given
-        CompanyUpdateDTO updateDTO = CompanyTestBuilder.builder()
+        CompanyUpdateRequestDTO updateDTO = CompanyTestBuilder.builder()
             .withName("Empresa Atualizada")
             .buildUpdateDTO();
             
@@ -137,7 +137,7 @@ class CompanyControllerTest {
             .withName("Empresa Atualizada")
             .buildUpdateCommand();
 
-        when(companyAdapterMapper.toUpdateCommand(any(CompanyUpdateDTO.class)))
+        when(companyAdapterMapper.toUpdateCommand(any(CompanyUpdateRequestDTO.class)))
             .thenReturn(updateCommand);
         when(companyPort.update(eq(companyId), any(CompanyUpdateCommandDTO.class)))
             .thenReturn(companyView);
@@ -158,7 +158,7 @@ class CompanyControllerTest {
         assertEquals(companyId, responseBody.getId());
         assertEquals(updateDTO.getName(), responseBody.getName());
         
-        verify(companyAdapterMapper, times(1)).toUpdateCommand(any(CompanyUpdateDTO.class));
+        verify(companyAdapterMapper, times(1)).toUpdateCommand(any(CompanyUpdateRequestDTO.class));
         verify(companyPort, times(1)).update(eq(companyId), any(CompanyUpdateCommandDTO.class));
         verify(companyAdapterMapper, times(1)).toResponseDTO(any(CompanyViewDTO.class));
     }
@@ -167,7 +167,7 @@ class CompanyControllerTest {
     @DisplayName("Deve lidar com exceções durante atualização")
     void shouldHandleExceptionsDuringUpdate() {
         // Given
-        CompanyUpdateDTO updateDTO = CompanyTestBuilder.builder()
+        CompanyUpdateRequestDTO updateDTO = CompanyTestBuilder.builder()
             .withName("Empresa Atualizada")
             .buildUpdateDTO();
             
@@ -175,7 +175,7 @@ class CompanyControllerTest {
             .withName("Empresa Atualizada")
             .buildUpdateCommand();
 
-        when(companyAdapterMapper.toUpdateCommand(any(CompanyUpdateDTO.class)))
+        when(companyAdapterMapper.toUpdateCommand(any(CompanyUpdateRequestDTO.class)))
             .thenReturn(updateCommand);
         when(companyPort.update(eq(companyId), any(CompanyUpdateCommandDTO.class)))
             .thenThrow(new RuntimeException("Service error"));
@@ -185,7 +185,7 @@ class CompanyControllerTest {
             companyController.update(companyId, updateDTO);
         });
         
-        verify(companyAdapterMapper, times(1)).toUpdateCommand(any(CompanyUpdateDTO.class));
+        verify(companyAdapterMapper, times(1)).toUpdateCommand(any(CompanyUpdateRequestDTO.class));
         verify(companyPort, times(1)).update(eq(companyId), any(CompanyUpdateCommandDTO.class));
     }
 

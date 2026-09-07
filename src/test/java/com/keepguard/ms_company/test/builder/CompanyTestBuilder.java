@@ -1,9 +1,10 @@
 package com.keepguard.ms_company.test.builder;
 
-import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.company.dto.request.CompanyUpdateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanyResponseDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.response.CompanySimpleResponseDTO;
+import com.keepguard.ms_company.application.dto.company.CompanySimpleViewDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyUpdateCommandDTO;
 import com.keepguard.ms_company.application.dto.company.CompanyViewDTO;
@@ -214,8 +215,8 @@ public class CompanyTestBuilder {
         );
     }
     
-    public CompanyCreateDTO buildCreateDTO() {
-        return new CompanyCreateDTO(
+    public CompanyCreateRequestDTO buildCreateDTO() {
+        return new CompanyCreateRequestDTO(
             name,
             legalName,
             cnpj,
@@ -226,8 +227,8 @@ public class CompanyTestBuilder {
         );
     }
     
-    public CompanyUpdateDTO buildUpdateDTO() {
-        return new CompanyUpdateDTO(
+    public CompanyUpdateRequestDTO buildUpdateDTO() {
+        return new CompanyUpdateRequestDTO(
             name,
             legalName,
             stateRegistration,
@@ -261,6 +262,24 @@ public class CompanyTestBuilder {
         );
     }
     
+    public CompanySimpleViewDTO buildSimpleViewDTO() {
+        return new CompanySimpleViewDTO(
+            id,
+            codeCompany,
+            tenantId,
+            name,
+            legalName,
+            cnpj,
+            stateRegistration,
+            municipalRegistration,
+            taxRegime,
+            stateRegistration,
+            status,
+            createdAt,
+            updatedAt
+        );
+    }
+
     public CompanySimpleResponseDTO buildSimpleResponseDTO() {
         return new CompanySimpleResponseDTO(
             id,
@@ -313,7 +332,7 @@ public class CompanyTestBuilder {
         return builder().buildUpdateCommand();
     }
     
-    public static CompanyUpdateDTO createDefaultUpdateDTO() {
+    public static CompanyUpdateRequestDTO createDefaultUpdateDTO() {
         return builder().buildUpdateDTO();
     }
 

@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.adapters.in.rest.bankaccount.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.BankAccountUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.request.BankAccountCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.response.BankAccountResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.bankaccount.dto.request.BankAccountUpdateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.BankAccountDTO;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.bankaccount.BankAccountUpdateCommandDTO;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class BankAccountAdapterMapper {
 
-    public BankAccountCreateCommandDTO toCreateCommand(BankAccountCreateDTO dto) {
+    public BankAccountCreateCommandDTO toCreateCommand(BankAccountCreateRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -29,12 +29,12 @@ public class BankAccountAdapterMapper {
                 dto.getAccountType()
             );
         } catch (Exception e) {
-            log.error("Erro ao mapear BankAccountCreateDTO para BankAccountCreateCommandDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear BankAccountCreateRequestDTO para BankAccountCreateCommandDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public BankAccountUpdateCommandDTO toUpdateCommand(BankAccountUpdateDTO dto) {
+    public BankAccountUpdateCommandDTO toUpdateCommand(BankAccountUpdateRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -49,7 +49,7 @@ public class BankAccountAdapterMapper {
                 dto.getAccountType()
             );
         } catch (Exception e) {
-            log.error("Erro ao mapear BankAccountUpdateDTO para BankAccountUpdateCommandDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear BankAccountUpdateRequestDTO para BankAccountUpdateCommandDTO: {}", e.getMessage(), e);
             throw e;
         }
     }

@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.adapters.in.rest.address.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.address.dto.AddressUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.request.AddressCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.response.AddressResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.address.dto.request.AddressUpdateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.AddressDTO;
 import com.keepguard.ms_company.application.dto.address.AddressCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.address.AddressUpdateCommandDTO;
@@ -37,10 +37,10 @@ class AddressAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve mapear AddressCreateDTO para AddressCreateCommandDTO com sucesso")
+    @DisplayName("Deve mapear AddressCreateRequestDTO para AddressCreateCommandDTO com sucesso")
     void shouldMapAddressCreateDTOToAddressCreateCommandDTOSuccessfully() {
         // Given
-        AddressCreateDTO dto = AddressTestBuilder.builder()
+        AddressCreateRequestDTO dto = AddressTestBuilder.builder()
             .buildCreateDTO();
         
         // When
@@ -59,7 +59,7 @@ class AddressAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve retornar null quando AddressCreateDTO for null")
+    @DisplayName("Deve retornar null quando AddressCreateRequestDTO for null")
     void shouldReturnNullWhenAddressCreateDTOIsNull() {
         // When
         AddressCreateCommandDTO result = addressAdapterMapper.toCreateCommand(null);
@@ -69,10 +69,10 @@ class AddressAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve mapear AddressUpdateDTO para AddressUpdateCommandDTO com sucesso")
+    @DisplayName("Deve mapear AddressUpdateRequestDTO para AddressUpdateCommandDTO com sucesso")
     void shouldMapAddressUpdateDTOToAddressUpdateCommandDTOSuccessfully() {
         // Given
-        AddressUpdateDTO dto = AddressTestBuilder.builder()
+        AddressUpdateRequestDTO dto = AddressTestBuilder.builder()
             .withRioDeJaneiro()
             .buildUpdateDTO();
         
@@ -92,7 +92,7 @@ class AddressAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve retornar null quando AddressUpdateDTO for null")
+    @DisplayName("Deve retornar null quando AddressUpdateRequestDTO for null")
     void shouldReturnNullWhenAddressUpdateDTOIsNull() {
         // When
         AddressUpdateCommandDTO result = addressAdapterMapper.toUpdateCommand(null);

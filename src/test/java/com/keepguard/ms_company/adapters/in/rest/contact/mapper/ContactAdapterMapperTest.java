@@ -1,8 +1,8 @@
 package com.keepguard.ms_company.adapters.in.rest.contact.mapper;
 
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactCreateDTO;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactResponseDTO;
-import com.keepguard.ms_company.adapters.in.rest.contact.dto.ContactUpdateDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.request.ContactCreateRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.response.ContactResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.contact.dto.request.ContactUpdateRequestDTO;
 import com.keepguard.ms_company.adapters.in.rest.company.dto.ContactDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactCreateCommandDTO;
 import com.keepguard.ms_company.application.dto.contact.ContactUpdateCommandDTO;
@@ -37,10 +37,10 @@ class ContactAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve mapear ContactCreateDTO para ContactCreateCommandDTO com sucesso")
+    @DisplayName("Deve mapear ContactCreateRequestDTO para ContactCreateCommandDTO com sucesso")
     void shouldMapContactCreateDTOToContactCreateCommandDTOSuccessfully() {
         // Given
-        ContactCreateDTO dto = ContactTestBuilder.builder()
+        ContactCreateRequestDTO dto = ContactTestBuilder.builder()
             .buildCreateDTO();
         
         // When
@@ -57,7 +57,7 @@ class ContactAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve retornar null quando ContactCreateDTO for null")
+    @DisplayName("Deve retornar null quando ContactCreateRequestDTO for null")
     void shouldReturnNullWhenContactCreateDTOIsNull() {
         // When
         ContactCreateCommandDTO result = contactAdapterMapper.toCreateCommand(null);
@@ -67,10 +67,10 @@ class ContactAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve mapear ContactUpdateDTO para ContactUpdateCommandDTO com sucesso")
+    @DisplayName("Deve mapear ContactUpdateRequestDTO para ContactUpdateCommandDTO com sucesso")
     void shouldMapContactUpdateDTOToContactUpdateCommandDTOSuccessfully() {
         // Given
-        ContactUpdateDTO dto = ContactTestBuilder.builder()
+        ContactUpdateRequestDTO dto = ContactTestBuilder.builder()
             .buildUpdateDTO();
         
         // When
@@ -87,7 +87,7 @@ class ContactAdapterMapperTest {
     }
     
     @Test
-    @DisplayName("Deve retornar null quando ContactUpdateDTO for null")
+    @DisplayName("Deve retornar null quando ContactUpdateRequestDTO for null")
     void shouldReturnNullWhenContactUpdateDTOIsNull() {
         // When
         ContactUpdateCommandDTO result = contactAdapterMapper.toUpdateCommand(null);

@@ -1,15 +1,11 @@
 package com.keepguard.ms_company.adapters.in.rest.companypolicy;
 
 import com.keepguard.lib_common.metrics.annotation.MetricsEndpoint;
-import com.keepguard.ms_company.adapters.in.rest.companypolicy.dto.CompanyPolicyResponse;
-import com.keepguard.ms_company.adapters.in.rest.companypolicy.dto.CreateCompanyPolicyRequest;
-import com.keepguard.ms_company.adapters.in.rest.companypolicy.dto.UpdateCompanyPolicyRequest;
+import com.keepguard.ms_company.adapters.in.rest.companypolicy.dto.request.CreateCompanyPolicyRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.companypolicy.dto.request.UpdateCompanyPolicyRequestDTO;
+import com.keepguard.ms_company.adapters.in.rest.companypolicy.dto.response.CompanyPolicyResponseDTO;
+import com.keepguard.ms_company.adapters.in.rest.companypolicy.mapper.CompanyPolicyAdapterMapper;
 import com.keepguard.ms_company.application.dto.companypolicy.CompanyPolicyViewDTO;
-import com.keepguard.ms_company.application.dto.companypolicy.CreateCompanyPolicyCommandDTO;
-import com.keepguard.ms_company.application.dto.companypolicy.DeactivateCompanyPolicyCommandDTO;
-import com.keepguard.ms_company.application.dto.companypolicy.GetActiveCompanyPoliciesQueryDTO;
-import com.keepguard.ms_company.application.dto.companypolicy.GetCompanyPoliciesQueryDTO;
-import com.keepguard.ms_company.application.dto.companypolicy.UpdateCompanyPolicyCommandDTO;
 import com.keepguard.ms_company.application.port.in.CompanyPolicyPort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,6 +30,7 @@ import java.util.UUID;
 public class CompanyPolicyController {
 
     private final CompanyPolicyPort companyPolicyPort;
+    private final CompanyPolicyAdapterMapper companyPolicyAdapterMapper;
 
     @PostMapping
     @MetricsEndpoint(endpoint = "company_policy_create", operation = "Criar política da empresa")
@@ -44,26 +41,15 @@ public class CompanyPolicyController {
         @ApiResponse(responseCode = "409", description = "Política com código já existe"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<CompanyPolicyResponse> create(
+    public ResponseEntity<CompanyPolicyResponseDTO> create(
             @Parameter(description = "ID da empresa") @PathVariable UUID companyId,
-            @Valid @RequestBody CreateCompanyPolicyRequest request) {
+            @Valid @RequestBody CreateCompanyPolicyRequestDTO request) {
 
         log.info("Criando política para empresa: {}", companyId);
 
-        var command = new CreateCompanyPolicyCommandDTO(
-            companyId,
-            request.getCode(),
-            request.getDescription(),
-            request.getStatus(),
-            request.getEffectiveFrom(),
-            request.getEffectiveTo(),
-            request.getCreatedBy()
-        );
-
-        CompanyPolicyViewDTO result = companyPolicyPort.create(command);
-        CompanyPolicyResponse response = CompanyPolicyResponse.from(result);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        CompanyPolicyViewDTO result = companyPolicyPort.create(
+            companyPolicyAdapterMapper.toCreateCommand(companyId, request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(companyPolicyAdapterMapper.toResponseDTO(result));
     }
 
     @PutMapping("/{policyId}")
@@ -75,25 +61,16 @@ public class CompanyPolicyController {
         @ApiResponse(responseCode = "404", description = "Política não encontrada"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<CompanyPolicyResponse> update(
+    public ResponseEntity<CompanyPolicyResponseDTO> update(
             @Parameter(description = "ID da empresa") @PathVariable UUID companyId,
             @Parameter(description = "ID da política") @PathVariable UUID policyId,
-            @Valid @RequestBody UpdateCompanyPolicyRequest request) {
+            @Valid @RequestBody UpdateCompanyPolicyRequestDTO request) {
 
         log.info("Atualizando política {} da empresa: {}", policyId, companyId);
 
-        var command = new UpdateCompanyPolicyCommandDTO(
-            policyId,
-            request.getDescription(),
-            request.getStatus(),
-            request.getEffectiveTo(),
-            request.getUpdatedBy()
-        );
-
-        CompanyPolicyViewDTO result = companyPolicyPort.update(command);
-        CompanyPolicyResponse response = CompanyPolicyResponse.from(result);
-
-        return ResponseEntity.ok(response);
+        CompanyPolicyViewDTO result = companyPolicyPort.update(
+            companyPolicyAdapterMapper.toUpdateCommand(policyId, request));
+        return ResponseEntity.ok(companyPolicyAdapterMapper.toResponseDTO(result));
     }
 
     @DeleteMapping("/{policyId}")
@@ -104,19 +81,16 @@ public class CompanyPolicyController {
         @ApiResponse(responseCode = "404", description = "Política não encontrada"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<CompanyPolicyResponse> deactivate(
+    public ResponseEntity<CompanyPolicyResponseDTO> deactivate(
             @Parameter(description = "ID da empresa") @PathVariable UUID companyId,
             @Parameter(description = "ID da política") @PathVariable UUID policyId,
             @RequestParam String updatedBy) {
 
         log.info("Desativando política {} da empresa: {}", policyId, companyId);
 
-        var command = new DeactivateCompanyPolicyCommandDTO(policyId, updatedBy);
-
-        CompanyPolicyViewDTO result = companyPolicyPort.deactivate(command);
-        CompanyPolicyResponse response = CompanyPolicyResponse.from(result);
-
-        return ResponseEntity.ok(response);
+        CompanyPolicyViewDTO result = companyPolicyPort.deactivate(
+            companyPolicyAdapterMapper.toDeactivateCommand(policyId, updatedBy));
+        return ResponseEntity.ok(companyPolicyAdapterMapper.toResponseDTO(result));
     }
 
     @GetMapping
@@ -126,18 +100,14 @@ public class CompanyPolicyController {
         @ApiResponse(responseCode = "200", description = "Lista de políticas retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<List<CompanyPolicyResponse>> list(
+    public ResponseEntity<List<CompanyPolicyResponseDTO>> list(
             @Parameter(description = "ID da empresa") @PathVariable UUID companyId) {
 
         log.info("Listando políticas da empresa: {}", companyId);
 
-        var query = new GetCompanyPoliciesQueryDTO(companyId);
-        List<CompanyPolicyViewDTO> result = companyPolicyPort.getPolicies(query);
-        List<CompanyPolicyResponse> response = result.stream()
-                .map(CompanyPolicyResponse::from)
-                .toList();
-
-        return ResponseEntity.ok(response);
+        List<CompanyPolicyViewDTO> result = companyPolicyPort.getPolicies(
+            companyPolicyAdapterMapper.toGetPoliciesQuery(companyId));
+        return ResponseEntity.ok(result.stream().map(companyPolicyAdapterMapper::toResponseDTO).toList());
     }
 
     @GetMapping("/active")
@@ -147,17 +117,13 @@ public class CompanyPolicyController {
         @ApiResponse(responseCode = "200", description = "Lista de políticas ativas retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<List<CompanyPolicyResponse>> listActive(
+    public ResponseEntity<List<CompanyPolicyResponseDTO>> listActive(
             @Parameter(description = "ID da empresa") @PathVariable UUID companyId) {
 
         log.info("Listando políticas ativas da empresa: {}", companyId);
 
-        var query = new GetActiveCompanyPoliciesQueryDTO(companyId);
-        List<CompanyPolicyViewDTO> result = companyPolicyPort.getActivePolicies(query);
-        List<CompanyPolicyResponse> response = result.stream()
-                .map(CompanyPolicyResponse::from)
-                .toList();
-
-        return ResponseEntity.ok(response);
+        List<CompanyPolicyViewDTO> result = companyPolicyPort.getActivePolicies(
+            companyPolicyAdapterMapper.toGetActivePoliciesQuery(companyId));
+        return ResponseEntity.ok(result.stream().map(companyPolicyAdapterMapper::toResponseDTO).toList());
     }
 }
